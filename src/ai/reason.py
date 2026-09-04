@@ -1,5 +1,5 @@
 """
-reason.py  —  Person 1
+reason.py  
 
 The reasoning half. Takes structured evidence (events + correlations + graph text),
 sends it to the local LLM, and gets back a grounded reconstruction where every

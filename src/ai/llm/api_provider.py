@@ -1,5 +1,5 @@
 """
-api_provider.py  —  Person 1
+api_provider.py 
 
 STUB. Not used in the MVP (no paid API). Exists so the seam is visible:
 later, drop in Anthropic/OpenAI here and set provider="api". Zero changes

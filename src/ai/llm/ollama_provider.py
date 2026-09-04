@@ -1,5 +1,5 @@
 """
-ollama_provider.py  —  Person 1
+ollama_provider.py  
 
 Talks to a local Ollama server. Free, offline, no API key.
 Start Ollama and pull the model first:

@@ -1,5 +1,5 @@
 """
-base.py  —  Person 1
+base.py 
 
 The LLM provider interface. Everything else calls .complete() and never
 knows or cares whether it's talking to Ollama (now) or an API (later).
