@@ -1,0 +1,96 @@
+{
+  "case_id": "incident_01",
+  "events": [
+    {
+      "timestamp": "2024-01-15T09:32:10Z",
+      "source": "sysmon",
+      "event_type": "process_creation",
+      "actor": "user1",
+      "object": "powershell.exe",
+      "command": "powershell -enc SQBFAF8AZQB4AGUAYwB1AHQAZQA=",
+      "raw": "2024-01-15T09:32:10Z,user1,process_creation,powershell.exe,\"powershell -enc SQBFAF8AZQB4AGUAYwB1AHQAZQA=\",,",
+      "artifact_id": "evt_00001",
+      "session_id": "s1",
+      "mitre": [
+        {"technique_id": "T1059.001", "name": "PowerShell"}
+      ],
+      "ioc": []
+    },
+    {
+      "timestamp": "2024-01-15T09:33:01Z",
+      "source": "sysmon",
+      "event_type": "network_connection",
+      "actor": "user1",
+      "object": "powershell.exe",
+      "src_ip": "10.0.0.5",
+      "dst_ip": "185.23.44.9",
+      "raw": "2024-01-15T09:33:01Z,user1,network_connection,powershell.exe,,10.0.0.5,185.23.44.9",
+      "artifact_id": "evt_00002",
+      "session_id": "s1",
+      "mitre": [
+        {"technique_id": "T1041", "name": "Exfiltration Over C2 Channel"}
+      ],
+      "ioc": ["185.23.44.9"]
+    },
+    {
+      "timestamp": "2024-01-15T09:34:22Z",
+      "source": "sysmon",
+      "event_type": "file_write",
+      "actor": "user1",
+      "object": "powershell.exe",
+      "command": "C:\\Users\\user1\\AppData\\Local\\Temp\\stage1.ps1",
+      "raw": "2024-01-15T09:34:22Z,user1,file_write,powershell.exe,\"C:\\Users\\user1\\AppData\\Local\\Temp\\stage1.ps1\",,",
+      "artifact_id": "evt_00003",
+      "session_id": "s1",
+      "mitre": [],
+      "ioc": []
+    },
+    {
+      "timestamp": "2024-01-15T09:36:47Z",
+      "source": "sysmon",
+      "event_type": "registry_write",
+      "actor": "user1",
+      "object": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\Updater",
+      "command": "powershell.exe -enc SQBFAF8AZQB4AGUAYwB1AHQAZQA=",
+      "raw": "2024-01-15T09:36:47Z,user1,registry_write,HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\Updater,\"powershell.exe -enc SQBFAF8AZQB4AGUAYwB1AHQAZQA=\",,",
+      "artifact_id": "evt_00004",
+      "session_id": "s1",
+      "mitre": [
+        {"technique_id": "T1547.001", "name": "Registry Run Keys / Startup Folder"}
+      ],
+      "ioc": []
+    },
+    {
+      "timestamp": "2024-01-15T09:41:15Z",
+      "source": "sysmon",
+      "event_type": "process_creation",
+      "actor": "user1",
+      "object": "cmd.exe",
+      "command": "cmd.exe /c whoami /all",
+      "raw": "2024-01-15T09:41:15Z,user1,process_creation,cmd.exe,\"cmd.exe /c whoami /all\",,",
+      "artifact_id": "evt_00005",
+      "session_id": "s1",
+      "mitre": [
+        {"technique_id": "T1059.003", "name": "Windows Command Shell"},
+        {"technique_id": "T1033", "name": "System Owner/User Discovery"}
+      ],
+      "ioc": []
+    },
+    {
+      "timestamp": "2024-01-15T10:12:03Z",
+      "source": "sysmon",
+      "event_type": "network_connection",
+      "actor": "user1",
+      "object": "powershell.exe",
+      "src_ip": "10.0.0.5",
+      "dst_ip": "185.23.44.9",
+      "raw": "2024-01-15T10:12:03Z,user1,network_connection,powershell.exe,,10.0.0.5,185.23.44.9",
+      "artifact_id": "evt_00006",
+      "session_id": "s2",
+      "mitre": [
+        {"technique_id": "T1041", "name": "Exfiltration Over C2 Channel"}
+      ],
+      "ioc": ["185.23.44.9"]
+    }
+  ]
+}
