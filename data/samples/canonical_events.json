@@ -1,0 +1,83 @@
+{
+  "case_id": "incident_01",
+  "events": [
+    {
+      "artifact_id": "evt_00001",
+      "timestamp": "2024-01-15T09:32:10Z",
+      "event_type": "process_creation",
+      "actor": "user1",
+      "object": "powershell.exe",
+      "command": "powershell -enc SQBFAF8AZQB4AGUAYwB1AHQAZQA=",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "2024-01-15T09:32:10Z,user1,process_creation,powershell.exe,\"powershell -enc SQBFAF8AZQB4AGUAYwB1AHQAZQA=\",,",
+      "source": "sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00002",
+      "timestamp": "2024-01-15T09:33:01Z",
+      "event_type": "network_connection",
+      "actor": "user1",
+      "object": "powershell.exe",
+      "command": "",
+      "src_ip": "10.0.0.5",
+      "dst_ip": "185.23.44.9",
+      "raw": "2024-01-15T09:33:01Z,user1,network_connection,powershell.exe,,10.0.0.5,185.23.44.9",
+      "source": "sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00003",
+      "timestamp": "2024-01-15T09:34:22Z",
+      "event_type": "file_write",
+      "actor": "user1",
+      "object": "powershell.exe",
+      "command": "C:\\Users\\user1\\AppData\\Local\\Temp\\stage1.ps1",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "2024-01-15T09:34:22Z,user1,file_write,powershell.exe,\"C:\\Users\\user1\\AppData\\Local\\Temp\\stage1.ps1\",,",
+      "source": "sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00004",
+      "timestamp": "2024-01-15T09:36:47Z",
+      "event_type": "registry_write",
+      "actor": "user1",
+      "object": "HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\Updater",
+      "command": "powershell.exe -enc SQBFAF8AZQB4AGUAYwB1AHQAZQA=",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "2024-01-15T09:36:47Z,user1,registry_write,HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run\\Updater,\"powershell.exe -enc SQBFAF8AZQB4AGUAYwB1AHQAZQA=\",,",
+      "source": "sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00005",
+      "timestamp": "2024-01-15T09:41:15Z",
+      "event_type": "process_creation",
+      "actor": "user1",
+      "object": "cmd.exe",
+      "command": "cmd.exe /c whoami /all",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "2024-01-15T09:41:15Z,user1,process_creation,cmd.exe,\"cmd.exe /c whoami /all\",,",
+      "source": "sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00006",
+      "timestamp": "2024-01-15T10:12:03Z",
+      "event_type": "network_connection",
+      "actor": "user1",
+      "object": "powershell.exe",
+      "command": "",
+      "src_ip": "10.0.0.5",
+      "dst_ip": "185.23.44.9",
+      "raw": "2024-01-15T10:12:03Z,user1,network_connection,powershell.exe,,10.0.0.5,185.23.44.9",
+      "source": "sysmon",
+      "session_id": "s2"
+    }
+  ]
+}
