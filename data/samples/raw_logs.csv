@@ -1,0 +1,7 @@
+timestamp,actor,event_type,object,command,src_ip,dst_ip,source,session_id,artifact_id
+2024-01-15T09:32:10Z,user1,process_creation,powershell.exe,"powershell -enc SQBFAF8AZQB4AGUAYwB1AHQAZQA=",,,sysmon,s1,evt_00001
+2024-01-15T09:33:01Z,user1,network_connection,powershell.exe,,10.0.0.5,185.23.44.9,sysmon,s1,evt_00002
+2024-01-15T09:34:22Z,user1,file_write,powershell.exe,"C:\Users\user1\AppData\Local\Temp\stage1.ps1",,,sysmon,s1,evt_00003
+2024-01-15T09:36:47Z,user1,registry_write,HKCU\Software\Microsoft\Windows\CurrentVersion\Run\Updater,"powershell.exe -enc SQBFAF8AZQB4AGUAYwB1AHQAZQA=",,,sysmon,s1,evt_00004
+2024-01-15T09:41:15Z,user1,process_creation,cmd.exe,"cmd.exe /c whoami /all",,,sysmon,s1,evt_00005
+2024-01-15T10:12:03Z,user1,network_connection,powershell.exe,,10.0.0.5,185.23.44.9,sysmon,s2,evt_00006
