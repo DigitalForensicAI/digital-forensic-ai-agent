@@ -1,0 +1,145 @@
+{
+  "techniques": [
+    {
+      "technique_id": "T1059.001",
+      "name": "PowerShell",
+      "tactic": "Execution",
+      "conditions": {
+        "event_types": ["process_creation"],
+        "object_contains": ["powershell.exe", "pwsh.exe", "powershell"]
+      }
+    },
+    {
+      "technique_id": "T1059.003",
+      "name": "Windows Command Shell",
+      "tactic": "Execution",
+      "conditions": {
+        "event_types": ["process_creation"],
+        "object_contains": ["cmd.exe"]
+      }
+    },
+    {
+      "technique_id": "T1041",
+      "name": "Exfiltration Over C2 Channel",
+      "tactic": "Exfiltration",
+      "conditions": {
+        "event_types": ["network_connection"],
+        "external_dst_ip": true
+      }
+    },
+    {
+      "technique_id": "T1547.001",
+      "name": "Registry Run Keys / Startup Folder",
+      "tactic": "Persistence",
+      "conditions": {
+        "event_types": ["registry_write"],
+        "object_contains": ["currentversion\\run", "currentversion\\runonce", "startup"]
+      }
+    },
+    {
+      "technique_id": "T1033",
+      "name": "System Owner/User Discovery",
+      "tactic": "Discovery",
+      "conditions": {
+        "command_contains": ["whoami", "quser", "query user"]
+      }
+    },
+    {
+      "technique_id": "T1082",
+      "name": "System Information Discovery",
+      "tactic": "Discovery",
+      "conditions": {
+        "command_contains": ["systeminfo", "hostname", "uname -a", "sysctl"]
+      }
+    },
+    {
+      "technique_id": "T1083",
+      "name": "File and Directory Discovery",
+      "tactic": "Discovery",
+      "conditions": {
+        "command_contains": ["dir /s", "ls -la", "get-childitem", "tree /f"]
+      }
+    },
+    {
+      "technique_id": "T1057",
+      "name": "Process Discovery",
+      "tactic": "Discovery",
+      "conditions": {
+        "command_contains": ["tasklist", "ps -ef", "ps aux", "get-process"]
+      }
+    },
+    {
+      "technique_id": "T1018",
+      "name": "Remote System Discovery",
+      "tactic": "Discovery",
+      "conditions": {
+        "command_contains": ["net view", "arp -a", "nbtstat", "ping -c"]
+      }
+    },
+    {
+      "technique_id": "T1087",
+      "name": "Account Discovery",
+      "tactic": "Discovery",
+      "conditions": {
+        "command_contains": ["net user", "net localgroup", "dsquery user"]
+      }
+    },
+    {
+      "technique_id": "T1071.001",
+      "name": "Web Protocols",
+      "tactic": "Command and Control",
+      "conditions": {
+        "command_contains": ["curl ", "wget ", "invoke-webrequest", "iwr "]
+      }
+    },
+    {
+      "technique_id": "T1105",
+      "name": "Ingress Tool Transfer",
+      "tactic": "Command and Control",
+      "conditions": {
+        "command_contains": ["certutil -urlcache", "bitsadmin /transfer", "m.exe", "stage1.ps1"]
+      }
+    },
+    {
+      "technique_id": "T1070.004",
+      "name": "File Deletion",
+      "tactic": "Defense Evasion",
+      "conditions": {
+        "event_types": ["file_delete"],
+        "command_contains": ["del /f", "rm -rf", "creds_dump.txt"]
+      }
+    },
+    {
+      "technique_id": "T1003",
+      "name": "OS Credential Dumping",
+      "tactic": "Credential Access",
+      "conditions": {
+        "command_contains": ["mimikatz", "procdump", "sekurlsa", "lsadump", "reg save hklm\\sam", "m.exe", "lsass.exe"]
+      }
+    },
+    {
+      "technique_id": "T1027",
+      "name": "Obfuscated Files or Information",
+      "tactic": "Defense Evasion",
+      "conditions": {
+        "command_contains": ["-enc ", "-encodedcommand", "-w hidden", "frombase64string"]
+      }
+    },
+    {
+      "technique_id": "T1560",
+      "name": "Archive Collected Data",
+      "tactic": "Collection",
+      "conditions": {
+        "command_contains": ["compress-archive", "tar -czf", "zip ", "7z "]
+      }
+    },
+    {
+      "technique_id": "T1562.001",
+      "name": "Disable or Modify Tools",
+      "tactic": "Defense Evasion",
+      "conditions": {
+        "command_contains": ["set-mppreference", "netsh advfirewall", "sc stop windefend"]
+      }
+    }
+  ]
+}
