@@ -1,0 +1,16 @@
+event_id,timestamp,host,log_source,sysmon_event_id,process_name,process_id,parent_process_name,parent_process_id,user,action,target_object,command_line,network_dest_ip,network_dest_port,mitre_technique,mitre_tactic
+1,2020-05-01T18:31:44Z,WORKSTATION5,Sysmon,1,powershell.exe,3164,explorer.exe,2208,CONTOSO\jsmith,ProcessCreate,,"powershell.exe -nop -w hidden -enc SQBFAFgA...",,,T1059.001,Execution
+2,2020-05-01T18:32:02Z,WORKSTATION5,Sysmon,11,powershell.exe,3164,,,CONTOSO\jsmith,FileCreate,C:\Users\jsmith\AppData\Local\Temp\m.exe,,,,T1105,Command and Control
+3,2020-05-01T18:32:15Z,WORKSTATION5,Sysmon,1,m.exe,4420,powershell.exe,3164,CONTOSO\jsmith,ProcessCreate,,"m.exe ""privilege::debug"" ""sekurlsa::logonpasswords""",,,T1003.001,Credential Access
+4,2020-05-01T18:32:16Z,WORKSTATION5,Sysmon,10,m.exe,4420,,,CONTOSO\jsmith,ProcessAccess,C:\Windows\System32\lsass.exe,,,,T1003.001,Credential Access
+5,2020-05-01T18:32:16Z,WORKSTATION5,WinEventLog-Security,,lsass.exe,700,,,NT AUTHORITY\SYSTEM,ProcessAccessGranted,PROCESS_VM_READ,,,,T1003.001,Credential Access
+6,2020-05-01T18:32:47Z,WORKSTATION5,Sysmon,1,m.exe,4420,,,CONTOSO\jsmith,ProcessCreate,,"m.exe ""lsadump::dcsync /user:CONTOSO\krbtgt""",,,T1003.006,Credential Access
+7,2020-05-01T18:32:48Z,WORKSTATION5,Sysmon,3,m.exe,4420,,,CONTOSO\jsmith,NetworkConnect,,,10.0.0.10,135,T1003.006,Credential Access
+8,2020-05-01T18:32:48Z,DC01,WinEventLog-Security,,lsass.exe,624,,,CONTOSO\jsmith,DirectoryReplicationRequest,DRSGetNCChanges,,,,T1003.006,Credential Access
+9,2020-05-01T18:32:50Z,DC01,WinEventLog-Security,,,,,,CONTOSO\jsmith,LogonSuccess,,,,,T1078,Defense Evasion
+10,2020-05-01T18:33:05Z,WORKSTATION5,Sysmon,11,m.exe,4420,,,CONTOSO\jsmith,FileCreate,C:\Users\jsmith\AppData\Local\Temp\creds_dump.txt,,,,T1074.001,Collection
+11,2020-05-01T18:33:40Z,WORKSTATION5,Sysmon,1,powershell.exe,5104,powershell.exe,3164,CONTOSO\jsmith,ProcessCreate,,"powershell.exe -c Compress-Archive creds_dump.txt out.zip",,,T1560,Collection
+12,2020-05-01T18:34:02Z,WORKSTATION5,Sysmon,3,powershell.exe,5104,,,CONTOSO\jsmith,NetworkConnect,,,203.0.113.55,443,T1041,Exfiltration
+13,2020-05-01T18:34:03Z,PERIMETER-FW,Zeek-conn,,,,,,,ConnectionAllowed,,,203.0.113.55,443,T1071.001,Command and Control
+14,2020-05-01T18:35:10Z,WORKSTATION5,Sysmon,5,m.exe,4420,,,CONTOSO\jsmith,ProcessTerminate,,,,,T1070,Defense Evasion
+15,2020-05-01T18:35:22Z,WORKSTATION5,Sysmon,23,,,,,CONTOSO\jsmith,FileDelete,C:\Users\jsmith\AppData\Local\Temp\creds_dump.txt,,,,T1070.004,Defense Evasion

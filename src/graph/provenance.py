@@ -1,6 +1,5 @@
 """
-provenance.py  —  Person 1
-
+provenance.py  
 Builds a provenance graph from correlations.json (the deterministic half of your work).
 NO LLM here. Just rules that turn events into nodes and edges.
 
