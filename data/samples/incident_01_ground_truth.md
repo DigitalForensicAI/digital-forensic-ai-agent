@@ -20,10 +20,10 @@
 
 - It is **small but complete**: it has a clear beginning (execution), middle (credential theft + replication abuse), and end (exfiltration + cleanup) in only 15 events — enough to test a parser and a timeline builder without needing to handle a huge log volume.
 - It **exercises multiple log sources** the dev team's parser will eventually need to normalize: Sysmon (process/file/network events), Windows Security event log (process access, logon, directory replication), and a network/firewall log (Zeek-style connection log) — a good first stress-test of the canonical event format.
-- It has **unambiguous MITRE mappings** per step (T1059.001, T1105, T1003.001, T1003.006, T1074.001, T1560, T1041, T1071.001, T1070/T1070.004), which gives Person 3 real technique labels to correlate against instead of needing to invent test cases.
+- It has **unambiguous MITRE mappings** per step (T1059.001, T1105, T1003.001, T1003.006, T1074.001, T1560, T1041, T1071.001, T1070/T1070.004), which gives the actual MITRE technique labels to correlate against instead of needing to invent test cases.
 - It shows **the DCSync pattern specifically**, which is a good "is our system evidence-grounded?" test case: the interesting signal is *not* on the DC's `lsass.exe` at all, it's a legitimate-looking replication call from an unusual peer — the kind of subtle, cross-host reasoning our multi-agent approach is meant to catch and that a single-log-source tool would likely miss.
 
-## What Person 2 needs to know for the parser/timeline
+## Parser/Timeline Integration Notes
 
 - Timestamps are already normalized to UTC ISO-8601 in the CSV — no timezone conversion needed for this sample.
 - Not every row has every field populated (e.g., network rows don't have a `sysmon_event_id`, DC rows don't have a `process_id`) — the parser should tolerate sparse/optional columns rather than assuming all fields are always present.
@@ -35,4 +35,4 @@
 ✅ Dataset chosen and justified (`research/datasets.md`)
 ✅ 15-row incident sample extracted (`data/samples/incident_01.csv`)
 ✅ Ground truth note written (this file)
-➡️ Next: send `incident_01.csv` + this ground-truth note to Person 2, then post the Day 1 update in the group.
+➡️ Next: integrate `incident_01.csv` and this ground-truth note into the parser/timeline, then post the Day 1 update in the group.
