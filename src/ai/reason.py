@@ -38,15 +38,21 @@ SCHEMA = {
 
 def build_evidence_text(case_id, events, graph_text):
     lines = [f"CASE: {case_id}", "", "TIMELINE (sorted events):"]
+
     for e in sorted(events, key=lambda x: x["timestamp"]):
-        flag = ""
-        if e.get("suspicious"):
-            flag = f"  [SUSPICIOUS {e.get('technique_id','')} {e.get('technique_name','')}: {e.get('reason','')}]"
+        mitre = e.get("mitre", [])
+        mitre_text = ", ".join(
+            f"{m.get('technique_id', '')} - {m.get('name', '')}"
+            for m in mitre
+        ) or "None"
+
         lines.append(
-            f"  {e['timestamp']} {e['artifact_id']} "
-            f"{e['actor']} {e['event_type']} {e['object']} "
-            f"{e.get('command','')} {e.get('dst_ip','')}".rstrip() + flag
+            f"  {e['timestamp']} | {e['artifact_id']} | "
+            f"event_type={e['event_type']} | actor={e['actor']} | "
+            f"object={e['object']} | command={e.get('command', '')} | "
+            f"dst_ip={e.get('dst_ip', '')} | MITRE={mitre_text}"
         )
+
     lines += ["", "PROVENANCE GRAPH (edges):", graph_text]
     return "\n".join(lines)
 
@@ -94,10 +100,21 @@ def reconstruct(path, provider_name="ollama", offline=False):
     else:
         prompt = (
             evidence
-            + "\n\nReconstruct the incident stage by stage "
-            "(Initial Access, Execution, Persistence, Exfiltration where they apply). "
-            "Return JSON only. Each stage claim must include the artifact_ids it relies on."
-        )
+            + "\n\nReconstruct the incident using ONLY the supplied evidence. "
+            "The MITRE technique name and tactic attached to each event are authoritative. "
+            "Use the supplied MITRE tactic as the stage name whenever a tactic is present. "
+            "Do not rename, reinterpret, or invent a different tactic or attack stage. "
+            "Do not infer lateral movement, privilege escalation, malware execution, or other activity "
+            "unless it is explicitly supported by the event or its MITRE mapping. "
+            "Do not treat a network connection as exfiltration unless the supplied MITRE mapping identifies "
+            "it as Exfiltration. "
+            "Do not create duplicate stages for the same artifact and technique. "
+            "Group related evidence when appropriate and order stages chronologically. "
+            "Every claim must cite the artifact_ids that directly support it. "
+            "Confidence must be exactly one of: high, medium, low. "
+            "If evidence does not support a stage, omit that stage rather than speculating. "
+            "Return JSON only."
+)
         try:
             provider = get_provider(provider_name)
             raw = provider.complete(SYSTEM, prompt, json_schema=SCHEMA)

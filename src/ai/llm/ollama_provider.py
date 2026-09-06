@@ -2,7 +2,7 @@ import json
 import requests
 
 OLLAMA_URL = "http://localhost:11434/api/generate"
-MODEL = "llama3.2:3b"
+MODEL = "llama3.2:latest"
 
 
 class OllamaProvider:
@@ -21,10 +21,12 @@ class OllamaProvider:
             payload["format"] = json_schema if isinstance(json_schema, dict) else "json"
 
         resp = requests.post(self.url, json=payload, timeout=180)
+        
         resp.raise_for_status()
         return resp.json()["response"]
 
 
 if __name__ == "__main__":
+    # quick smoke test — run this FIRST, before writing any other code
     p = OllamaProvider()
     print(p.complete("You are terse.", "Say hello in one word."))

@@ -70,6 +70,7 @@ def evaluate_mitre(event: Dict[str, Any], techniques: List[Dict[str, Any]]) -> L
             matches.append({
                 "technique_id": tech["technique_id"],
                 "name": tech["name"],
+                "tactic": tech.get("tactic", ""),
             })
 
     return matches
