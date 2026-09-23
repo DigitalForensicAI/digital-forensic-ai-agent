@@ -1,0 +1,6 @@
+{
+  "case_id": "adv_case2",
+  "events": [
+    {"artifact_id":"evt_00001","timestamp":"2024-02-02T09:00:00Z","event_type":"process_creation","actor":"admin","object":"cmd.exe","command":"cmd.exe /c ipconfig","src_ip":"","dst_ip":"","raw":"row1","suspicious":false,"technique_id":"","technique_name":"","reason":"","confidence":""}
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "case_id": "adversarial_01",
+  "events": [
+    {
+      "timestamp": "2024-01-15T10:12:03Z",
+      "source": "sysmon",
+      "event_type": "network_connection",
+      "actor": "user1",
+      "object": "powershell.exe",
+      "src_ip": "10.0.0.5",
+      "dst_ip": "185.23.44.9",
+      "raw": "2024-01-15T10:12:03Z,user1,network_connection,powershell.exe,,10.0.0.5,185.23.44.9",
+      "artifact_id": "adv_evt_00001",
+      "session_id": "adv_s1",
+      "mitre": [],
+      "ioc": [
+        "185.23.44.9"
+      ]
+    }
+  ]
+}

@@ -1,15 +1,3 @@
-"""
-render.py  —  Person 1
-
-Turns verified.json (+ graph.png) into the final report.md.
-Pure string formatting, no LLM.
-
-Run:
-    python -m src.report.render output/verified.json
-Produces:
-    output/report.md
-"""
-
 import json
 import sys
 import os

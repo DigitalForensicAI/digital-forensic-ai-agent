@@ -1,0 +1,7 @@
+{
+  "case_id": "incident_01_hallucination_demo",
+  "events": [
+    {"artifact_id":"evt_00001","timestamp":"2024-01-15T09:32:10Z","event_type":"process_creation","actor":"user1","object":"powershell.exe","command":"powershell -enc SQBFAFgA...","src_ip":"","dst_ip":"","raw":"row1","suspicious":true,"technique_id":"T1059.001","technique_name":"PowerShell","reason":"Encoded PowerShell","confidence":"high"},
+    {"artifact_id":"evt_00003","timestamp":"2024-01-15T09:33:44Z","event_type":"network_connection","actor":"user1","object":"powershell.exe","command":"","src_ip":"10.0.0.5","dst_ip":"185.23.44.9","raw":"row3","suspicious":true,"technique_id":"T1041","technique_name":"Exfiltration Over C2 Channel","reason":"Known-bad IP","confidence":"medium"}
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "case_id": "adv_case1",
+  "events": [
+    {"artifact_id":"evt_00001","timestamp":"2024-02-01T10:00:00Z","event_type":"process_creation","actor":"user2","object":"powershell.exe","command":"powershell -enc AAAA","src_ip":"","dst_ip":"","raw":"row1","suspicious":true,"technique_id":"T1059.001","technique_name":"PowerShell","reason":"Encoded PowerShell","confidence":"high"},
+    {"artifact_id":"evt_00002","timestamp":"2024-02-01T10:01:00Z","event_type":"file_write","actor":"user2","object":"powershell.exe","command":"","src_ip":"","dst_ip":"","raw":"wrote C:\\temp\\notes.txt","suspicious":false,"technique_id":"","technique_name":"","reason":"","confidence":""}
+  ]
+}

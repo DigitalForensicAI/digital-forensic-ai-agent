@@ -1,16 +1,3 @@
-"""
-main.py  —  Person 1 (owns), whole team agrees
-
-Runs the entire pipeline in sequence:
-  correlations.json -> graph -> reason (LLM) -> verify -> report.md
-
-Usage:
-    python main.py --input data/samples/correlations.json
-
-Note: input here is correlations.json (Person 3's output). When Person 2/3's
-earlier stages are wired in too, this can start from the raw log instead.
-"""
-
 import argparse
 import os
 

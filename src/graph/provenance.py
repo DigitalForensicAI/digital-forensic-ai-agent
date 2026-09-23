@@ -1,21 +1,3 @@
-"""
-provenance.py  
-Builds a provenance graph from correlations.json (the deterministic half of your work).
-NO LLM here. Just rules that turn events into nodes and edges.
-
-Node types:  user, process, file, network
-Edges:       user --started--> process
-             process --wrote--> file
-             process --connected_to--> network
-             process --executed--> command
-
-Run:
-    python -m src.graph.provenance data/samples/correlations.json
-Produces:
-    output/graph.png
-    and returns the networkx graph + a text serialization for the LLM.
-"""
-
 import json
 import sys
 import os
@@ -86,6 +68,9 @@ def graph_to_text(g):
         lines.append(f"{a} --{d['label']}--> {b} [{d['artifact_id']}]")
     return "\n".join(lines)
 
+def short_label(name, maxlen=14):
+    name = str(name)
+    return name if len(name) <= maxlen else name[:maxlen-1] + "…"
 
 def draw(g, out_path="output/graph.png"):
     os.makedirs(os.path.dirname(out_path), exist_ok=True)
@@ -94,7 +79,8 @@ def draw(g, out_path="output/graph.png"):
     node_colors = [colors.get(g.nodes[n].get("ntype"), "#999999") for n in g.nodes]
     pos = nx.spring_layout(g, seed=42, k=1.2)
     plt.figure(figsize=(11, 7))
-    nx.draw(g, pos, with_labels=True, node_color=node_colors,
+    labels = {n: short_label(n) for n in g.nodes}
+    nx.draw(g, pos, labels=labels, node_color=node_colors,
             node_size=1600, font_size=7, font_color="white",
             edgecolors="black", linewidths=0.5, arrows=True)
     edge_labels = {(a, b): d["label"] for a, b, d in g.edges(data=True)}

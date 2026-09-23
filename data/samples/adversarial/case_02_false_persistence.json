@@ -1,0 +1,17 @@
+{
+  "case_id": "adversarial_02",
+  "events": [
+    {
+      "timestamp": "2024-01-15T09:34:22Z",
+      "source": "sysmon",
+      "event_type": "file_write",
+      "actor": "user1",
+      "object": "C:\\Users\\user1\\AppData\\Local\\Temp\\stage1.ps1",
+      "command": "powershell.exe -enc ABC123",
+      "artifact_id": "adv_evt_00002",
+      "session_id": "adv_s1",
+      "mitre": [],
+      "ioc": []
+    }
+  ]
+}

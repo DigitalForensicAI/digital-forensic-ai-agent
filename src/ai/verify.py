@@ -1,19 +1,3 @@
-"""
-verify.py  —  Person 1  (Day 2)
-
-The verifier: your research contribution made concrete.
-Takes the LLM's investigation.json and checks every claim against the real
-evidence. A claim is "grounded" only if all the artifact_ids it cites actually
-exist in the event set. Unsupported claims get flagged, not trusted.
-
-grounding_score = grounded_claims / total_claims
-
-Run:
-    python -m src.ai.verify data/samples/correlations.json output/investigation.json
-Produces:
-    output/verified.json   (investigation + per-claim grounded flag + score)
-"""
-
 import json
 import sys
 
