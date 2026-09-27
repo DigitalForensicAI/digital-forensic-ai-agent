@@ -1,0 +1,9 @@
+Fabricated cases: 3 / 5
+Caught by GROUNDED pipeline: 2 / 3
+Caught by UNGUARDED model:   0 / 3  (never checks evidence)
+
+[A1_true_claim] fabricated=False | unguarded=ACCEPTED | grounded=GROUNDED (score 1.0)
+[A2_true_claim] fabricated=False | unguarded=ACCEPTED | grounded=GROUNDED (score 1.0)
+[B1_fabricated_id] fabricated=True | unguarded=ACCEPTED | grounded=UNSUPPORTED (score 0.0)
+[B2_mismatched_evidence] fabricated=True | unguarded=ACCEPTED | grounded=MISMATCHED (score 0.0)
+[B3_overclaim] fabricated=True | unguarded=ACCEPTED | grounded=GROUNDED (score 1.0)

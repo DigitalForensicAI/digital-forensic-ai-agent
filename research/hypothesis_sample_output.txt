@@ -1,0 +1,8 @@
+Considered 13 events, 13 flagged suspicious, grouped into 6 kill-chain stages.
+
+1. [Execution] powershell.exe executed 1 action(s) to run attacker code on WORKSTATION5. (confidence 0.9) [evt_00001]
+2. [Defense Evasion] jsmith, m.exe took 3 action(s) to evade defenses or remove traces on DC01, WORKSTATION5. (confidence 0.62) [evt_00007, evt_00012, evt_00013]
+3. [Credential Access] lsass.exe, m.exe accessed or dumped credentials via 4 action(s) on DC01, WORKSTATION5. (confidence 0.93) [evt_00003, evt_00004, evt_00005, evt_00006]
+4. [Collection] m.exe, powershell.exe staged/collected data via 2 action(s) on WORKSTATION5. (confidence 0.75) [evt_00008, evt_00009]
+5. [Command and Control] PERIMETER-FW, powershell.exe communicated with external infrastructure via 2 action(s) from PERIMETER-FW, WORKSTATION5. (confidence 0.68) [evt_00002, evt_00011]
+6. [Exfiltration] powershell.exe exfiltrated data via 1 action(s) from WORKSTATION5. (confidence 0.75) [evt_00010]

@@ -1,0 +1,14 @@
+Overall grounding score: 0.5
+
+[GROUNDED] The adversary ran an obfuscated PowerShell command to begin execution.
+  -> evt_00001: technique_match=True, keyword_overlap=['command', 'powershell']
+
+[GROUNDED] The adversary dumped credentials directly from LSASS memory.
+  -> evt_00004: technique_match=True, keyword_overlap=['lsass']
+
+[UNSUPPORTED] Files were encrypted by ransomware.
+  -> Cited artifact id(s) not found in evidence store: ['evt_00099']. This citation is fabricated.
+
+[MISMATCHED] Files were encrypted by ransomware.
+  -> Cited artifact id(s) exist, but neither technique nor keyword content matches this specific claim; the evidence does not actually support it. (evt_00002: technique_match=False, keyword_overlap=none)
+
