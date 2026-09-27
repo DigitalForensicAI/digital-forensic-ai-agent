@@ -1,0 +1,54 @@
+{
+  "total_cases": 5,
+  "fabricated_cases": 3,
+  "fabricated_cases_caught_by_grounded_pipeline": 2,
+  "fabricated_cases_caught_by_unguarded_model": 0,
+  "overall_grounding_score_on_case_set": 0.6,
+  "comparison": [
+    {
+      "case_id": "A1_true_claim",
+      "description": "Baseline: accurate claim, real evidence, correct technique.",
+      "is_fabricated": false,
+      "unguarded_result": "ACCEPTED",
+      "grounded_verdict": "GROUNDED",
+      "grounded_score": 1.0,
+      "grounding_layer_caught_it": "n/a (not fabricated)"
+    },
+    {
+      "case_id": "A2_true_claim",
+      "description": "Baseline: accurate claim, real evidence, correct technique.",
+      "is_fabricated": false,
+      "unguarded_result": "ACCEPTED",
+      "grounded_verdict": "GROUNDED",
+      "grounded_score": 1.0,
+      "grounding_layer_caught_it": "n/a (not fabricated)"
+    },
+    {
+      "case_id": "B1_fabricated_id",
+      "description": "Fabricated citation: cited artifact id does not exist at all (Review 1-style hallucination).",
+      "is_fabricated": true,
+      "unguarded_result": "ACCEPTED",
+      "grounded_verdict": "UNSUPPORTED",
+      "grounded_score": 0.0,
+      "grounding_layer_caught_it": true
+    },
+    {
+      "case_id": "B2_mismatched_evidence",
+      "description": "Subtler fabrication: cited artifact id is real, but the evidence (a tool being dropped to disk) does not support a ransomware encryption claim. A pure existence check (Review 1) would miss this.",
+      "is_fabricated": true,
+      "unguarded_result": "ACCEPTED",
+      "grounded_verdict": "MISMATCHED",
+      "grounded_score": 0.0,
+      "grounding_layer_caught_it": true
+    },
+    {
+      "case_id": "B3_overclaim",
+      "description": "Overclaim: the technique is correctly identified (T1041, matches), so technique-alignment alone would pass this. Flagged here as a known limitation -- see notes below.",
+      "is_fabricated": true,
+      "unguarded_result": "ACCEPTED",
+      "grounded_verdict": "GROUNDED",
+      "grounded_score": 1.0,
+      "grounding_layer_caught_it": false
+    }
+  ]
+}

@@ -1,0 +1,129 @@
+{
+  "stages": [
+    {
+      "tactic": "Execution",
+      "narrative": "powershell.exe executed 1 action(s) to run attacker code on WORKSTATION5.",
+      "techniques": [
+        {
+          "technique_id": "T1059.001",
+          "technique_name": "Command and Scripting Interpreter: PowerShell"
+        }
+      ],
+      "supporting_artifact_ids": [
+        "evt_00001"
+      ],
+      "stage_confidence": 0.9,
+      "start_time": "2020-05-01T18:31:44Z",
+      "end_time": "2020-05-01T18:31:44Z"
+    },
+    {
+      "tactic": "Defense Evasion",
+      "narrative": "jsmith, m.exe took 3 action(s) to evade defenses or remove traces on DC01, WORKSTATION5.",
+      "techniques": [
+        {
+          "technique_id": "T1070",
+          "technique_name": "Indicator Removal"
+        },
+        {
+          "technique_id": "T1070.004",
+          "technique_name": "Indicator Removal: File Deletion"
+        },
+        {
+          "technique_id": "T1078",
+          "technique_name": "Valid Accounts"
+        }
+      ],
+      "supporting_artifact_ids": [
+        "evt_00007",
+        "evt_00012",
+        "evt_00013"
+      ],
+      "stage_confidence": 0.62,
+      "start_time": "2020-05-01T18:32:50Z",
+      "end_time": "2020-05-01T18:35:22Z"
+    },
+    {
+      "tactic": "Credential Access",
+      "narrative": "lsass.exe, m.exe accessed or dumped credentials via 4 action(s) on DC01, WORKSTATION5.",
+      "techniques": [
+        {
+          "technique_id": "T1003.001",
+          "technique_name": "OS Credential Dumping: LSASS Memory"
+        },
+        {
+          "technique_id": "T1003.006",
+          "technique_name": "OS Credential Dumping: DCSync"
+        }
+      ],
+      "supporting_artifact_ids": [
+        "evt_00003",
+        "evt_00004",
+        "evt_00005",
+        "evt_00006"
+      ],
+      "stage_confidence": 0.93,
+      "start_time": "2020-05-01T18:32:15Z",
+      "end_time": "2020-05-01T18:32:48Z"
+    },
+    {
+      "tactic": "Collection",
+      "narrative": "m.exe, powershell.exe staged/collected data via 2 action(s) on WORKSTATION5.",
+      "techniques": [
+        {
+          "technique_id": "T1074.001",
+          "technique_name": "Data Staged: Local Data Staging"
+        },
+        {
+          "technique_id": "T1560",
+          "technique_name": "Archive Collected Data"
+        }
+      ],
+      "supporting_artifact_ids": [
+        "evt_00008",
+        "evt_00009"
+      ],
+      "stage_confidence": 0.75,
+      "start_time": "2020-05-01T18:33:05Z",
+      "end_time": "2020-05-01T18:33:40Z"
+    },
+    {
+      "tactic": "Command and Control",
+      "narrative": "PERIMETER-FW, powershell.exe communicated with external infrastructure via 2 action(s) from PERIMETER-FW, WORKSTATION5.",
+      "techniques": [
+        {
+          "technique_id": "T1071.001",
+          "technique_name": "Application Layer Protocol: Web Protocols"
+        },
+        {
+          "technique_id": "T1105",
+          "technique_name": "Ingress Tool Transfer"
+        }
+      ],
+      "supporting_artifact_ids": [
+        "evt_00002",
+        "evt_00011"
+      ],
+      "stage_confidence": 0.68,
+      "start_time": "2020-05-01T18:32:02Z",
+      "end_time": "2020-05-01T18:34:03Z"
+    },
+    {
+      "tactic": "Exfiltration",
+      "narrative": "powershell.exe exfiltrated data via 1 action(s) from WORKSTATION5.",
+      "techniques": [
+        {
+          "technique_id": "T1041",
+          "technique_name": "Exfiltration Over C2 Channel"
+        }
+      ],
+      "supporting_artifact_ids": [
+        "evt_00010"
+      ],
+      "stage_confidence": 0.75,
+      "start_time": "2020-05-01T18:34:02Z",
+      "end_time": "2020-05-01T18:34:02Z"
+    }
+  ],
+  "total_events_considered": 13,
+  "total_suspicious_events": 13
+}

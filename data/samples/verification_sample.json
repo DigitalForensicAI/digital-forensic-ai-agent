@@ -1,0 +1,29 @@
+{
+  "overall_grounding_score": 0.5,
+  "claims": [
+    {
+      "claim": "The adversary ran an obfuscated PowerShell command to begin execution.",
+      "verdict": "GROUNDED",
+      "grounding": 1.0,
+      "detail": "evt_00001: technique_match=True, keyword_overlap=['command', 'powershell']"
+    },
+    {
+      "claim": "The adversary dumped credentials directly from LSASS memory.",
+      "verdict": "GROUNDED",
+      "grounding": 1.0,
+      "detail": "evt_00004: technique_match=True, keyword_overlap=['lsass']"
+    },
+    {
+      "claim": "Files were encrypted by ransomware.",
+      "verdict": "UNSUPPORTED",
+      "grounding": 0.0,
+      "detail": "Cited artifact id(s) not found in evidence store: ['evt_00099']. This citation is fabricated."
+    },
+    {
+      "claim": "Files were encrypted by ransomware.",
+      "verdict": "MISMATCHED",
+      "grounding": 0.0,
+      "detail": "Cited artifact id(s) exist, but neither technique nor keyword content matches this specific claim; the evidence does not actually support it. (evt_00002: technique_match=False, keyword_overlap=none)"
+    }
+  ]
+}
