@@ -2,157 +2,292 @@
   "techniques": [
     {
       "technique_id": "T1059.001",
-      "name": "PowerShell",
+      "name": "Command and Scripting Interpreter: PowerShell",
       "tactic": "Execution",
-      "description": "Adversaries may abuse PowerShell commands and scripts for execution.",
       "conditions": {
-        "event_types": ["process_creation"],
+        "event_types": ["process_creation", "processcreate", "process_create"],
         "object_contains": ["powershell.exe", "pwsh.exe", "powershell"]
-      }
+      },
+      "confidence": 0.9
+    },
+    {
+      "technique_id": "T1059.001",
+      "name": "Command and Scripting Interpreter: PowerShell",
+      "tactic": "Execution",
+      "conditions": {
+        "event_types": ["process_creation", "processcreate", "process_create"],
+        "command_contains": ["powershell.exe", "powershell -", "pwsh", "-encodedcommand", "-enc "]
+      },
+      "confidence": 0.9
     },
     {
       "technique_id": "T1059.003",
-      "name": "Windows Command Shell",
+      "name": "Command and Scripting Interpreter: Windows Command Shell",
       "tactic": "Execution",
-      "description": "Adversaries may abuse the Windows command shell for execution.",
       "conditions": {
-        "event_types": ["process_creation"],
+        "event_types": ["process_creation", "processcreate", "process_create"],
         "object_contains": ["cmd.exe"]
-      }
+      },
+      "confidence": 0.85
     },
     {
-      "technique_id": "T1041",
-      "name": "Exfiltration Over C2 Channel",
-      "tactic": "Exfiltration",
-      "description": "Adversaries may steal data by transferring it over an existing command and control channel.",
+      "technique_id": "T1059.003",
+      "name": "Command and Scripting Interpreter: Windows Command Shell",
+      "tactic": "Execution",
       "conditions": {
-        "event_types": ["network_connection"],
-        "external_dst_ip": true,
-        "object_contains": ["powershell.exe", "cmd.exe", "rundll32.exe", "mshta.exe"]
-      }
-    },
-    {
-      "technique_id": "T1547.001",
-      "name": "Registry Run Keys / Startup Folder",
-      "tactic": "Persistence",
-      "description": "Adversaries may achieve persistence by adding an entry to the Run or RunOnce registry keys.",
-      "conditions": {
-        "event_types": ["registry_write"],
-        "object_contains": ["currentversion\\run", "currentversion\\runonce", "startup"]
-      }
-    },
-    {
-      "technique_id": "T1033",
-      "name": "System Owner/User Discovery",
-      "tactic": "Discovery",
-      "description": "Adversaries may attempt to identify the primary user, currently logged-in user, or system owner.",
-      "conditions": {
-        "command_contains": ["whoami", "quser", "query user"]
-      }
-    },
-    {
-      "technique_id": "T1082",
-      "name": "System Information Discovery",
-      "tactic": "Discovery",
-      "description": "Adversaries may attempt to get detailed information about the operating system and hardware.",
-      "conditions": {
-        "command_contains": ["systeminfo", "hostname", "uname -a", "sysctl"]
-      }
-    },
-    {
-      "technique_id": "T1083",
-      "name": "File and Directory Discovery",
-      "tactic": "Discovery",
-      "description": "Adversaries may enumerate files and directories or search for specific information on file systems.",
-      "conditions": {
-        "command_contains": ["dir /s", "ls -la", "get-childitem", "tree /f", "findstr"]
-      }
-    },
-    {
-      "technique_id": "T1057",
-      "name": "Process Discovery",
-      "tactic": "Discovery",
-      "description": "Adversaries may attempt to get information about running processes on a system.",
-      "conditions": {
-        "command_contains": ["tasklist", "ps -ef", "ps aux", "get-process"]
-      }
-    },
-    {
-      "technique_id": "T1018",
-      "name": "Remote System Discovery",
-      "tactic": "Discovery",
-      "description": "Adversaries may attempt to get a listing of other systems by IP address, hostname, or other logical identifier.",
-      "conditions": {
-        "command_contains": ["net view", "arp -a", "nbtstat", "ping -c", "ping -n"]
-      }
-    },
-    {
-      "technique_id": "T1087",
-      "name": "Account Discovery",
-      "tactic": "Discovery",
-      "description": "Adversaries may attempt to get a list of local system or domain accounts.",
-      "conditions": {
-        "command_contains": ["net user", "net localgroup", "dsquery user"]
-      }
-    },
-    {
-      "technique_id": "T1071.001",
-      "name": "Web Protocols",
-      "tactic": "Command and Control",
-      "description": "Adversaries may communicate using application layer protocols associated with web traffic (HTTP/HTTPS).",
-      "conditions": {
-        "command_contains": ["curl ", "wget ", "invoke-webrequest", "iwr "]
-      }
+        "event_types": ["process_creation", "processcreate", "process_create"],
+        "command_contains": ["cmd.exe", "cmd /c", "cmd /k"]
+      },
+      "confidence": 0.85
     },
     {
       "technique_id": "T1105",
       "name": "Ingress Tool Transfer",
       "tactic": "Command and Control",
-      "description": "Adversaries may transfer tools or other files from an external system into a compromised environment.",
       "conditions": {
-        "command_contains": ["certutil -urlcache", "bitsadmin /transfer", "certutil.exe -urlcache"]
-      }
+        "event_types": ["file_create", "filecreate"],
+        "object_contains": ["\\temp\\m.exe", "mimikatz.exe", "payload.bin"]
+      },
+      "confidence": 0.8
+    },
+    {
+      "technique_id": "T1105",
+      "name": "Ingress Tool Transfer",
+      "tactic": "Command and Control",
+      "conditions": {
+        "event_types": ["process_creation", "processcreate"],
+        "command_contains": ["certutil -urlcache", "bitsadmin /transfer", "curl ", "wget ", "invoke-webrequest"]
+      },
+      "confidence": 0.8
+    },
+    {
+      "technique_id": "T1003.001",
+      "name": "OS Credential Dumping: LSASS Memory",
+      "tactic": "Credential Access",
+      "conditions": {
+        "event_types": ["process_creation", "processcreate"],
+        "command_contains": ["sekurlsa::logonpasswords", "sekurlsa::", "procdump", "mimikatz", "privilege::debug", "logonpasswords"]
+      },
+      "confidence": 0.95
+    },
+    {
+      "technique_id": "T1003.001",
+      "name": "OS Credential Dumping: LSASS Memory",
+      "tactic": "Credential Access",
+      "conditions": {
+        "event_types": ["process_access", "processaccess", "processaccessgranted"],
+        "object_contains": ["lsass.exe", "process_vm_read"]
+      },
+      "confidence": 0.9
+    },
+    {
+      "technique_id": "T1003.006",
+      "name": "OS Credential Dumping: DCSync",
+      "tactic": "Credential Access",
+      "conditions": {
+        "event_types": ["process_creation", "processcreate"],
+        "command_contains": ["lsadump::dcsync", "dcsync", "krbtgt"]
+      },
+      "confidence": 0.95
+    },
+    {
+      "technique_id": "T1003.006",
+      "name": "OS Credential Dumping: DCSync",
+      "tactic": "Credential Access",
+      "conditions": {
+        "event_types": ["directoryreplicationrequest", "network_connection", "networkconnect"],
+        "object_contains": ["drsgetncchanges"]
+      },
+      "confidence": 0.9
+    },
+    {
+      "technique_id": "T1078",
+      "name": "Valid Accounts",
+      "tactic": "Defense Evasion",
+      "conditions": {
+        "event_types": ["logonsuccess", "user_logon", "authentication"]
+      },
+      "confidence": 0.65
+    },
+    {
+      "technique_id": "T1074.001",
+      "name": "Data Staged: Local Data Staging",
+      "tactic": "Collection",
+      "conditions": {
+        "event_types": ["file_create", "filecreate"],
+        "object_contains": ["creds_dump.txt", "dump.txt", "passwords.txt", "staged_data"]
+      },
+      "confidence": 0.75
+    },
+    {
+      "technique_id": "T1560",
+      "name": "Archive Collected Data",
+      "tactic": "Collection",
+      "conditions": {
+        "event_types": ["process_creation", "processcreate"],
+        "command_contains": ["compress-archive", "tar -czf", "zip ", "7z ", "out.zip", "rar a "]
+      },
+      "confidence": 0.85
+    },
+    {
+      "technique_id": "T1041",
+      "name": "Exfiltration Over C2 Channel",
+      "tactic": "Exfiltration",
+      "conditions": {
+        "event_types": ["network_connection", "networkconnect", "connectionallowed"],
+        "external_dst_ip": true
+      },
+      "confidence": 0.8
+    },
+    {
+      "technique_id": "T1071.001",
+      "name": "Application Layer Protocol: Web Protocols",
+      "tactic": "Command and Control",
+      "conditions": {
+        "event_types": ["network_connection", "networkconnect", "connectionallowed"],
+        "command_contains": ["curl ", "wget ", "invoke-webrequest", "iwr "]
+      },
+      "confidence": 0.75
+    },
+    {
+      "technique_id": "T1070",
+      "name": "Indicator Removal",
+      "tactic": "Defense Evasion",
+      "conditions": {
+        "event_types": ["processterminate", "process_terminate"],
+        "actor_contains": ["m.exe", "mimikatz"]
+      },
+      "confidence": 0.6
     },
     {
       "technique_id": "T1070.004",
-      "name": "File Deletion",
+      "name": "Indicator Removal: File Deletion",
       "tactic": "Defense Evasion",
-      "description": "Adversaries may delete files left behind by the actions of their malware or tooling.",
       "conditions": {
-        "command_contains": ["del /f", "rm -rf", "rmdir /s", "vssadmin delete shadows"]
-      }
+        "event_types": ["file_delete", "filedelete"]
+      },
+      "confidence": 0.75
     },
     {
-      "technique_id": "T1003",
-      "name": "OS Credential Dumping",
-      "tactic": "Credential Access",
-      "description": "Adversaries may dump credentials to obtain account login and credential material.",
+      "technique_id": "T1070.004",
+      "name": "Indicator Removal: File Deletion",
+      "tactic": "Defense Evasion",
       "conditions": {
-        "command_contains": ["mimikatz", "procdump", "sekurlsa", "reg save hklm\\sam", "comsvcs.dll"]
-      }
+        "event_types": ["process_creation", "processcreate"],
+        "command_contains": ["del /f", "rm -rf", "del ", "rm "]
+      },
+      "confidence": 0.75
+    },
+    {
+      "technique_id": "T1547.001",
+      "name": "Registry Run Keys / Startup Folder",
+      "tactic": "Persistence",
+      "conditions": {
+        "event_types": ["registry_write", "registry_modify"],
+        "object_contains": ["currentversion\\run", "currentversion\\runonce", "startup"]
+      },
+      "confidence": 0.85
+    },
+    {
+      "technique_id": "T1033",
+      "name": "System Owner/User Discovery",
+      "tactic": "Discovery",
+      "conditions": {
+        "command_contains": ["whoami", "quser", "query user"]
+      },
+      "confidence": 0.8
+    },
+    {
+      "technique_id": "T1082",
+      "name": "System Information Discovery",
+      "tactic": "Discovery",
+      "conditions": {
+        "command_contains": ["systeminfo", "hostname", "uname -a", "sysctl"]
+      },
+      "confidence": 0.8
+    },
+    {
+      "technique_id": "T1083",
+      "name": "File and Directory Discovery",
+      "tactic": "Discovery",
+      "conditions": {
+        "command_contains": ["dir /s", "ls -la", "get-childitem", "tree /f"]
+      },
+      "confidence": 0.75
+    },
+    {
+      "technique_id": "T1057",
+      "name": "Process Discovery",
+      "tactic": "Discovery",
+      "conditions": {
+        "command_contains": ["tasklist", "ps -ef", "ps aux", "get-process"]
+      },
+      "confidence": 0.75
+    },
+    {
+      "technique_id": "T1018",
+      "name": "Remote System Discovery",
+      "tactic": "Discovery",
+      "conditions": {
+        "command_contains": ["net view", "arp -a", "nbtstat", "ping -c"]
+      },
+      "confidence": 0.75
+    },
+    {
+      "technique_id": "T1087",
+      "name": "Account Discovery",
+      "tactic": "Discovery",
+      "conditions": {
+        "command_contains": ["net user", "net localgroup", "dsquery user"]
+      },
+      "confidence": 0.8
     },
     {
       "technique_id": "T1027",
       "name": "Obfuscated Files or Information",
       "tactic": "Defense Evasion",
-      "description": "Adversaries may attempt to make an executable or script difficult to discover or analyze.",
       "conditions": {
-        "command_contains": ["-enc ", "-encodedcommand", "frombase64string", "gzipstream"]
-      }
+        "command_contains": ["-enc ", "-encodedcommand", "-w hidden", "frombase64string"]
+      },
+      "confidence": 0.9
     },
     {
       "technique_id": "T1562.001",
       "name": "Disable or Modify Tools",
       "tactic": "Defense Evasion",
-      "description": "Adversaries may modify and/or disable security software or antivirus tools.",
       "conditions": {
-        "command_contains": ["set-mppreference -disablerealtime", "netsh advfirewall set", "sc stop windefend"]
-      }
+        "command_contains": ["set-mppreference", "netsh advfirewall", "sc stop windefend"]
+      },
+      "confidence": 0.9
+    },
+    {
+      "technique_id": "T1021.002",
+      "name": "Remote Services: SMB/Windows Admin Shares",
+      "tactic": "Lateral Movement",
+      "conditions": {
+        "event_types": ["network_connection", "networkconnect"],
+        "object_contains": [":445", ":139", ":135"],
+        "command_contains": ["psexec", "net use \\\\"]
+      },
+      "confidence": 0.85
+    },
+    {
+      "technique_id": "T1053.005",
+      "name": "Scheduled Task/Job: Scheduled Task",
+      "tactic": "Persistence",
+      "conditions": {
+        "command_contains": ["schtasks /create", "schtasks /run", "register-scheduledtask"]
+      },
+      "confidence": 0.85
+    },
+    {
+      "technique_id": "T1543.003",
+      "name": "Create or Modify System Process: Windows Service",
+      "tactic": "Persistence",
+      "conditions": {
+        "command_contains": ["sc create", "new-service", "sc start"]
+      },
+      "confidence": 0.85
     }
-  ],
-  "known_iocs": {
-    "ips": ["185.23.44.9", "198.51.100.23", "203.0.113.88"],
-    "domains": ["evil-c2-domain.com", "pastebin.com/raw/malicious"],
-    "hashes": ["e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"]
-  }
+  ]
 }
