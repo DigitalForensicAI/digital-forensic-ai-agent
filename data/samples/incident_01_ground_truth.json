@@ -1,0 +1,71 @@
+{
+  "case_id": "incident_01",
+  "dataset_name": "OTRF / Mordor - APT29-style Credential Access & C2 Exfiltration",
+  "total_events": 15,
+  "expected_stages": [
+    "Execution",
+    "Defense Evasion",
+    "Credential Access",
+    "Collection",
+    "Command and Control",
+    "Exfiltration"
+  ],
+  "expected_techniques": [
+    {
+      "technique_id": "T1059.001",
+      "name": "PowerShell",
+      "tactic": "Execution"
+    },
+    {
+      "technique_id": "T1105",
+      "name": "Ingress Tool Transfer",
+      "tactic": "Command and Control"
+    },
+    {
+      "technique_id": "T1003.001",
+      "name": "OS Credential Dumping: LSASS Memory",
+      "tactic": "Credential Access"
+    },
+    {
+      "technique_id": "T1003.006",
+      "name": "OS Credential Dumping: DCSync",
+      "tactic": "Credential Access"
+    },
+    {
+      "technique_id": "T1078",
+      "name": "Valid Accounts",
+      "tactic": "Defense Evasion"
+    },
+    {
+      "technique_id": "T1074.001",
+      "name": "Data Staged: Local Data Staging",
+      "tactic": "Collection"
+    },
+    {
+      "technique_id": "T1560",
+      "name": "Archive Collected Data",
+      "tactic": "Collection"
+    },
+    {
+      "technique_id": "T1041",
+      "name": "Exfiltration Over C2 Channel",
+      "tactic": "Exfiltration"
+    },
+    {
+      "technique_id": "T1071.001",
+      "name": "Application Layer Protocol: Web Protocols",
+      "tactic": "Command and Control"
+    },
+    {
+      "technique_id": "T1070",
+      "name": "Indicator Removal",
+      "tactic": "Defense Evasion"
+    },
+    {
+      "technique_id": "T1070.004",
+      "name": "Indicator Removal: File Deletion",
+      "tactic": "Defense Evasion"
+    }
+  ],
+  "notes": "Reference ground truth for incident_01 verified against research/datasets.md and data/samples/incident_01_ground_truth.md."
+}
