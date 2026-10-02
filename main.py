@@ -4,7 +4,10 @@ import os
 from src.graph.provenance import load_events, build_graph, draw
 from src.ai.reason import reconstruct
 from src.ai.verify import verify
+from src.report.build import build_report
 from src.report.render import render
+from src.report.export_docx import export_docx
+from src.report.export_pdf import export_pdf
 
 
 def main():
@@ -31,13 +34,21 @@ def main():
     print(f"      grounding score: {verified['grounding_score']} "
           f"({verified['grounded_claims']}/{verified['total_claims']})")
 
-    print("[4/4] rendering report...")
-    md = render(verified)
+    print("[4/4] building report...")
+    report = build_report(verified, events, graph_path="output/graph.png")
+
+    md = render(report)
     with open("output/report.md", "w") as f:
         f.write(md)
     print("      -> output/report.md")
 
-    print("\nDone. Open output/report.md")
+    export_docx(report, out_path="output/report.docx")
+    print("      -> output/report.docx")
+
+    export_pdf(report, out_path="output/report.pdf")
+    print("      -> output/report.pdf")
+
+    print("\nDone. Open output/report.md, output/report.docx, or output/report.pdf")
 
 
 if __name__ == "__main__":

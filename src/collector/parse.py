@@ -60,12 +60,19 @@ def parse_csv_log(file_path: str, default_source: str = "sysmon", default_sessio
                 continue
 
             def get_val(names: List[str], fallback_idx: int = -1, default: str = "") -> str:
+                matched_a_real_column = False
                 for name in names:
                     if name in col_map and col_map[name] < len(row):
+                        matched_a_real_column = True
                         val = row[col_map[name]].strip()
                         if val:
                             return val
-                if 0 <= fallback_idx < len(row):
+                # Only fall back to a bare positional index for legacy, headerless
+                # files (where col_map itself was built from fixed positions).
+                # If this file HAS a header and we matched a named column for it,
+                # an empty value there means the field is genuinely blank for this
+                # row -- never grab an unrelated column by raw position instead.
+                if not has_header and not matched_a_real_column and 0 <= fallback_idx < len(row):
                     val = row[fallback_idx].strip()
                     if val:
                         return val
@@ -90,8 +97,13 @@ def parse_csv_log(file_path: str, default_source: str = "sysmon", default_sessio
             raw_action = get_val(["event_type", "action"], 2).lower().replace("_", "").replace("-", "")
             event_type = ACTION_MAP.get(raw_action, get_val(["event_type", "action"], 2).lower())
             
-            # Object
-            obj = get_val(["object", "process_name", "target_object", "target"], 3)
+            # Object: prefer the thing the action was done TO (target_object,
+            # e.g. the file written/deleted, the process accessed) over the
+            # acting process name, since that's what the forensic narrative
+            # cares about. Falls back to process_name for events like
+            # ProcessCreate/NetworkConnect/ProcessTerminate where there is no
+            # separate target.
+            obj = get_val(["object", "target_object", "process_name", "target"], 3)
             cmd = get_val(["command", "command_line", "cmd"], 4)
             src_ip = get_val(["src_ip", "network_src_ip", "source_ip"], 5)
             dst_ip = get_val(["dst_ip", "network_dest_ip", "destination_ip"], 6)
