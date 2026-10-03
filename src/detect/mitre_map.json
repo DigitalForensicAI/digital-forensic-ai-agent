@@ -16,7 +16,7 @@
       "tactic": "Execution",
       "conditions": {
         "event_types": ["process_creation", "processcreate", "process_create"],
-        "command_contains": ["powershell.exe", "powershell -", "pwsh"]
+        "command_contains": ["powershell.exe", "powershell -", "pwsh", "-enc"]
       },
       "confidence": 0.9
     },
@@ -155,7 +155,7 @@
       "tactic": "Command and Control",
       "conditions": {
         "event_types": ["network_connection", "networkconnect", "connectionallowed"],
-        "command_contains": ["curl ", "wget ", "invoke-webrequest", "iwr "]
+        "source_contains": ["zeek", "firewall", "perimeter-fw"]
       },
       "confidence": 0.75
     },
@@ -165,7 +165,7 @@
       "tactic": "Command and Control",
       "conditions": {
         "event_types": ["network_connection", "networkconnect", "connectionallowed"],
-        "object_contains": [":443", ":80"]
+        "command_contains": ["curl ", "wget ", "invoke-webrequest", "iwr "]
       },
       "confidence": 0.75
     },
@@ -261,15 +261,6 @@
         "command_contains": ["net user", "net localgroup", "dsquery user"]
       },
       "confidence": 0.8
-    },
-    {
-      "technique_id": "T1027",
-      "name": "Obfuscated Files or Information",
-      "tactic": "Defense Evasion",
-      "conditions": {
-        "command_contains": ["-enc ", "-encodedcommand", "-w hidden", "frombase64string"]
-      },
-      "confidence": 0.9
     },
     {
       "technique_id": "T1562.001",

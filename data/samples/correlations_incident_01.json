@@ -1,0 +1,426 @@
+{
+  "case_id": "incident_01",
+  "events": [
+    {
+      "artifact_id": "evt_00001",
+      "timestamp": "2020-05-01T18:31:44Z",
+      "event_type": "process_creation",
+      "actor": "CONTOSO\\jsmith",
+      "object": "powershell.exe",
+      "command": "powershell.exe -nop -w hidden -enc SQBFAFgA...",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "1,2020-05-01T18:31:44Z,WORKSTATION5,Sysmon,1,powershell.exe,3164,explorer.exe,2208,CONTOSO\\jsmith,ProcessCreate,,powershell.exe -nop -w hidden -enc SQBFAFgA...,,,T1059.001,Execution",
+      "suspicious": true,
+      "technique_id": "T1059.001",
+      "technique_name": "Command and Scripting Interpreter: PowerShell",
+      "reason": "Detected Command and Scripting Interpreter: PowerShell (T1059.001)",
+      "confidence": 0.9,
+      "mitre": [
+        {
+          "technique_id": "T1059.001",
+          "name": "Command and Scripting Interpreter: PowerShell",
+          "tactic": "Execution",
+          "confidence": 0.9
+        }
+      ],
+      "ioc": [],
+      "source": "Sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00002",
+      "timestamp": "2020-05-01T18:32:02Z",
+      "event_type": "file_write",
+      "actor": "CONTOSO\\jsmith",
+      "object": "C:\\Users\\jsmith\\AppData\\Local\\Temp\\m.exe",
+      "command": "",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "2,2020-05-01T18:32:02Z,WORKSTATION5,Sysmon,11,powershell.exe,3164,,,CONTOSO\\jsmith,FileCreate,C:\\Users\\jsmith\\AppData\\Local\\Temp\\m.exe,,,,T1105,Command and Control",
+      "suspicious": true,
+      "technique_id": "T1105",
+      "technique_name": "Ingress Tool Transfer",
+      "reason": "Detected Ingress Tool Transfer (T1105)",
+      "confidence": 0.8,
+      "mitre": [
+        {
+          "technique_id": "T1105",
+          "name": "Ingress Tool Transfer",
+          "tactic": "Command and Control",
+          "confidence": 0.8
+        }
+      ],
+      "ioc": [],
+      "source": "Sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00003",
+      "timestamp": "2020-05-01T18:32:15Z",
+      "event_type": "process_creation",
+      "actor": "CONTOSO\\jsmith",
+      "object": "m.exe",
+      "command": "m.exe \"privilege::debug\" \"sekurlsa::logonpasswords\"",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "3,2020-05-01T18:32:15Z,WORKSTATION5,Sysmon,1,m.exe,4420,powershell.exe,3164,CONTOSO\\jsmith,ProcessCreate,,m.exe \"privilege::debug\" \"sekurlsa::logonpasswords\",,,T1003.001,Credential Access",
+      "suspicious": true,
+      "technique_id": "T1003.001",
+      "technique_name": "OS Credential Dumping: LSASS Memory",
+      "reason": "Detected OS Credential Dumping: LSASS Memory (T1003.001)",
+      "confidence": 0.95,
+      "mitre": [
+        {
+          "technique_id": "T1003.001",
+          "name": "OS Credential Dumping: LSASS Memory",
+          "tactic": "Credential Access",
+          "confidence": 0.95
+        }
+      ],
+      "ioc": [],
+      "source": "Sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00004",
+      "timestamp": "2020-05-01T18:32:16Z",
+      "event_type": "process_access",
+      "actor": "CONTOSO\\jsmith",
+      "object": "C:\\Windows\\System32\\lsass.exe",
+      "command": "",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "4,2020-05-01T18:32:16Z,WORKSTATION5,Sysmon,10,m.exe,4420,,,CONTOSO\\jsmith,ProcessAccess,C:\\Windows\\System32\\lsass.exe,,,,T1003.001,Credential Access",
+      "suspicious": true,
+      "technique_id": "T1003.001",
+      "technique_name": "OS Credential Dumping: LSASS Memory",
+      "reason": "Detected OS Credential Dumping: LSASS Memory (T1003.001)",
+      "confidence": 0.9,
+      "mitre": [
+        {
+          "technique_id": "T1003.001",
+          "name": "OS Credential Dumping: LSASS Memory",
+          "tactic": "Credential Access",
+          "confidence": 0.9
+        }
+      ],
+      "ioc": [],
+      "source": "Sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00005",
+      "timestamp": "2020-05-01T18:32:16Z",
+      "event_type": "process_access",
+      "actor": "NT AUTHORITY\\SYSTEM",
+      "object": "PROCESS_VM_READ",
+      "command": "",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "5,2020-05-01T18:32:16Z,WORKSTATION5,WinEventLog-Security,,lsass.exe,700,,,NT AUTHORITY\\SYSTEM,ProcessAccessGranted,PROCESS_VM_READ,,,,T1003.001,Credential Access",
+      "suspicious": true,
+      "technique_id": "T1003.001",
+      "technique_name": "OS Credential Dumping: LSASS Memory",
+      "reason": "Detected OS Credential Dumping: LSASS Memory (T1003.001)",
+      "confidence": 0.9,
+      "mitre": [
+        {
+          "technique_id": "T1003.001",
+          "name": "OS Credential Dumping: LSASS Memory",
+          "tactic": "Credential Access",
+          "confidence": 0.9
+        }
+      ],
+      "ioc": [],
+      "source": "WinEventLog-Security",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00006",
+      "timestamp": "2020-05-01T18:32:47Z",
+      "event_type": "process_creation",
+      "actor": "CONTOSO\\jsmith",
+      "object": "m.exe",
+      "command": "m.exe \"lsadump::dcsync /user:CONTOSO\\krbtgt\"",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "6,2020-05-01T18:32:47Z,WORKSTATION5,Sysmon,1,m.exe,4420,,,CONTOSO\\jsmith,ProcessCreate,,m.exe \"lsadump::dcsync /user:CONTOSO\\krbtgt\",,,T1003.006,Credential Access",
+      "suspicious": true,
+      "technique_id": "T1003.006",
+      "technique_name": "OS Credential Dumping: DCSync",
+      "reason": "Detected OS Credential Dumping: DCSync (T1003.006)",
+      "confidence": 0.95,
+      "mitre": [
+        {
+          "technique_id": "T1003.006",
+          "name": "OS Credential Dumping: DCSync",
+          "tactic": "Credential Access",
+          "confidence": 0.95
+        }
+      ],
+      "ioc": [],
+      "source": "Sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00007",
+      "timestamp": "2020-05-01T18:32:48Z",
+      "event_type": "network_connection",
+      "actor": "CONTOSO\\jsmith",
+      "object": "m.exe",
+      "command": "",
+      "src_ip": "",
+      "dst_ip": "10.0.0.10",
+      "raw": "7,2020-05-01T18:32:48Z,WORKSTATION5,Sysmon,3,m.exe,4420,,,CONTOSO\\jsmith,NetworkConnect,,,10.0.0.10,135,T1003.006,Credential Access",
+      "suspicious": true,
+      "technique_id": "T1003.006",
+      "technique_name": "OS Credential Dumping: DCSync",
+      "reason": "Detected OS Credential Dumping: DCSync (T1003.006)",
+      "confidence": 0.85,
+      "mitre": [
+        {
+          "technique_id": "T1003.006",
+          "name": "OS Credential Dumping: DCSync",
+          "tactic": "Credential Access",
+          "confidence": 0.85
+        }
+      ],
+      "ioc": [],
+      "source": "Sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00008",
+      "timestamp": "2020-05-01T18:32:48Z",
+      "event_type": "directory_replication",
+      "actor": "CONTOSO\\jsmith",
+      "object": "DRSGetNCChanges",
+      "command": "",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "8,2020-05-01T18:32:48Z,DC01,WinEventLog-Security,,lsass.exe,624,,,CONTOSO\\jsmith,DirectoryReplicationRequest,DRSGetNCChanges,,,,T1003.006,Credential Access",
+      "suspicious": true,
+      "technique_id": "T1003.006",
+      "technique_name": "OS Credential Dumping: DCSync",
+      "reason": "Detected OS Credential Dumping: DCSync (T1003.006)",
+      "confidence": 0.9,
+      "mitre": [
+        {
+          "technique_id": "T1003.006",
+          "name": "OS Credential Dumping: DCSync",
+          "tactic": "Credential Access",
+          "confidence": 0.9
+        }
+      ],
+      "ioc": [],
+      "source": "WinEventLog-Security",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00009",
+      "timestamp": "2020-05-01T18:32:50Z",
+      "event_type": "logon_success",
+      "actor": "CONTOSO\\jsmith",
+      "object": "",
+      "command": "",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "9,2020-05-01T18:32:50Z,DC01,WinEventLog-Security,,,,,,CONTOSO\\jsmith,LogonSuccess,,,,,T1078,Defense Evasion",
+      "suspicious": true,
+      "technique_id": "T1078",
+      "technique_name": "Valid Accounts",
+      "reason": "Detected Valid Accounts (T1078)",
+      "confidence": 0.65,
+      "mitre": [
+        {
+          "technique_id": "T1078",
+          "name": "Valid Accounts",
+          "tactic": "Defense Evasion",
+          "confidence": 0.65
+        }
+      ],
+      "ioc": [],
+      "source": "WinEventLog-Security",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00010",
+      "timestamp": "2020-05-01T18:33:05Z",
+      "event_type": "file_write",
+      "actor": "CONTOSO\\jsmith",
+      "object": "C:\\Users\\jsmith\\AppData\\Local\\Temp\\creds_dump.txt",
+      "command": "",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "10,2020-05-01T18:33:05Z,WORKSTATION5,Sysmon,11,m.exe,4420,,,CONTOSO\\jsmith,FileCreate,C:\\Users\\jsmith\\AppData\\Local\\Temp\\creds_dump.txt,,,,T1074.001,Collection",
+      "suspicious": true,
+      "technique_id": "T1074.001",
+      "technique_name": "Data Staged: Local Data Staging",
+      "reason": "Detected Data Staged: Local Data Staging (T1074.001)",
+      "confidence": 0.75,
+      "mitre": [
+        {
+          "technique_id": "T1074.001",
+          "name": "Data Staged: Local Data Staging",
+          "tactic": "Collection",
+          "confidence": 0.75
+        }
+      ],
+      "ioc": [],
+      "source": "Sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00011",
+      "timestamp": "2020-05-01T18:33:40Z",
+      "event_type": "process_creation",
+      "actor": "CONTOSO\\jsmith",
+      "object": "powershell.exe",
+      "command": "powershell.exe -c Compress-Archive creds_dump.txt out.zip",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "11,2020-05-01T18:33:40Z,WORKSTATION5,Sysmon,1,powershell.exe,5104,powershell.exe,3164,CONTOSO\\jsmith,ProcessCreate,,powershell.exe -c Compress-Archive creds_dump.txt out.zip,,,T1560,Collection",
+      "suspicious": true,
+      "technique_id": "T1059.001",
+      "technique_name": "Command and Scripting Interpreter: PowerShell",
+      "reason": "Detected Command and Scripting Interpreter: PowerShell (T1059.001)",
+      "confidence": 0.9,
+      "mitre": [
+        {
+          "technique_id": "T1059.001",
+          "name": "Command and Scripting Interpreter: PowerShell",
+          "tactic": "Execution",
+          "confidence": 0.9
+        },
+        {
+          "technique_id": "T1560",
+          "name": "Archive Collected Data",
+          "tactic": "Collection",
+          "confidence": 0.85
+        }
+      ],
+      "ioc": [],
+      "source": "Sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00012",
+      "timestamp": "2020-05-01T18:34:02Z",
+      "event_type": "network_connection",
+      "actor": "CONTOSO\\jsmith",
+      "object": "powershell.exe",
+      "command": "",
+      "src_ip": "",
+      "dst_ip": "203.0.113.55",
+      "raw": "12,2020-05-01T18:34:02Z,WORKSTATION5,Sysmon,3,powershell.exe,5104,,,CONTOSO\\jsmith,NetworkConnect,,,203.0.113.55,443,T1041,Exfiltration",
+      "suspicious": true,
+      "technique_id": "T1041",
+      "technique_name": "Exfiltration Over C2 Channel",
+      "reason": "Detected Exfiltration Over C2 Channel (T1041); Matched IOC: 203.0.113.55",
+      "confidence": 0.9,
+      "mitre": [
+        {
+          "technique_id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "tactic": "Exfiltration",
+          "confidence": 0.8
+        }
+      ],
+      "ioc": [
+        "203.0.113.55"
+      ],
+      "source": "Sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00013",
+      "timestamp": "2020-05-01T18:34:03Z",
+      "event_type": "network_connection",
+      "actor": "",
+      "object": "",
+      "command": "",
+      "src_ip": "",
+      "dst_ip": "203.0.113.55",
+      "raw": "13,2020-05-01T18:34:03Z,PERIMETER-FW,Zeek-conn,,,,,,,ConnectionAllowed,,,203.0.113.55,443,T1071.001,Command and Control",
+      "suspicious": true,
+      "technique_id": "T1041",
+      "technique_name": "Exfiltration Over C2 Channel",
+      "reason": "Detected Exfiltration Over C2 Channel (T1041); Matched IOC: 203.0.113.55",
+      "confidence": 0.9,
+      "mitre": [
+        {
+          "technique_id": "T1041",
+          "name": "Exfiltration Over C2 Channel",
+          "tactic": "Exfiltration",
+          "confidence": 0.8
+        },
+        {
+          "technique_id": "T1071.001",
+          "name": "Application Layer Protocol: Web Protocols",
+          "tactic": "Command and Control",
+          "confidence": 0.75
+        }
+      ],
+      "ioc": [
+        "203.0.113.55"
+      ],
+      "source": "Zeek-conn",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00014",
+      "timestamp": "2020-05-01T18:35:10Z",
+      "event_type": "process_terminate",
+      "actor": "CONTOSO\\jsmith",
+      "object": "m.exe",
+      "command": "",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "14,2020-05-01T18:35:10Z,WORKSTATION5,Sysmon,5,m.exe,4420,,,CONTOSO\\jsmith,ProcessTerminate,,,,,T1070,Defense Evasion",
+      "suspicious": true,
+      "technique_id": "T1070",
+      "technique_name": "Indicator Removal",
+      "reason": "Detected Indicator Removal (T1070)",
+      "confidence": 0.6,
+      "mitre": [
+        {
+          "technique_id": "T1070",
+          "name": "Indicator Removal",
+          "tactic": "Defense Evasion",
+          "confidence": 0.6
+        }
+      ],
+      "ioc": [],
+      "source": "Sysmon",
+      "session_id": "s1"
+    },
+    {
+      "artifact_id": "evt_00015",
+      "timestamp": "2020-05-01T18:35:22Z",
+      "event_type": "file_delete",
+      "actor": "CONTOSO\\jsmith",
+      "object": "C:\\Users\\jsmith\\AppData\\Local\\Temp\\creds_dump.txt",
+      "command": "",
+      "src_ip": "",
+      "dst_ip": "",
+      "raw": "15,2020-05-01T18:35:22Z,WORKSTATION5,Sysmon,23,,,,,CONTOSO\\jsmith,FileDelete,C:\\Users\\jsmith\\AppData\\Local\\Temp\\creds_dump.txt,,,,T1070.004,Defense Evasion",
+      "suspicious": true,
+      "technique_id": "T1070.004",
+      "technique_name": "Indicator Removal: File Deletion",
+      "reason": "Detected Indicator Removal: File Deletion (T1070.004)",
+      "confidence": 0.75,
+      "mitre": [
+        {
+          "technique_id": "T1070.004",
+          "name": "Indicator Removal: File Deletion",
+          "tactic": "Defense Evasion",
+          "confidence": 0.75
+        }
+      ],
+      "ioc": [],
+      "source": "Sysmon",
+      "session_id": "s1"
+    }
+  ]
+}

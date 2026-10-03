@@ -63,6 +63,7 @@ def evaluate_mitre(event: Dict[str, Any], techniques: List[Dict[str, Any]]) -> L
     actor = str(event.get("actor", "")).strip().lower()
     obj = str(event.get("object", "")).strip().lower()
     cmd = str(event.get("command", "")).strip().lower()
+    src = str(event.get("source", "")).strip().lower()
     dst_ip = str(event.get("dst_ip", "")).strip()
 
     for tech in techniques:
@@ -77,6 +78,10 @@ def evaluate_mitre(event: Dict[str, Any], techniques: List[Dict[str, Any]]) -> L
 
         actor_contains = cond.get("actor_contains") or ([cond["actor"]] if "actor" in cond else None)
         if actor_contains and not any(sub.lower() in actor for sub in actor_contains):
+            is_matched = False
+
+        source_contains = cond.get("source_contains")
+        if source_contains and not any(sub.lower() in src or sub.lower() in actor for sub in source_contains):
             is_matched = False
 
         obj_contains = cond.get("object_contains") or ([cond["object"]] if "object" in cond else None)
