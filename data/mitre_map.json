@@ -16,7 +16,7 @@
       "tactic": "Execution",
       "conditions": {
         "event_types": ["process_creation", "processcreate", "process_create"],
-        "command_contains": ["powershell.exe", "powershell -", "pwsh", "-encodedcommand", "-enc "]
+        "command_contains": ["powershell.exe", "powershell -", "pwsh"]
       },
       "confidence": 0.9
     },
@@ -45,8 +45,8 @@
       "name": "Ingress Tool Transfer",
       "tactic": "Command and Control",
       "conditions": {
-        "event_types": ["file_create", "filecreate"],
-        "object_contains": ["\\temp\\m.exe", "mimikatz.exe", "payload.bin"]
+        "event_types": ["file_write", "filewrite", "file_create", "filecreate"],
+        "object_contains": ["\\temp\\m.exe", "m.exe", "mimikatz.exe", "payload.bin"]
       },
       "confidence": 0.8
     },
@@ -66,7 +66,7 @@
       "tactic": "Credential Access",
       "conditions": {
         "event_types": ["process_creation", "processcreate"],
-        "command_contains": ["sekurlsa::logonpasswords", "sekurlsa::", "procdump", "mimikatz", "privilege::debug", "logonpasswords"]
+        "command_contains": ["sekurlsa::logonpasswords", "sekurlsa::", "procdump", "mimikatz", "privilege::debug"]
       },
       "confidence": 0.95
     },
@@ -95,17 +95,27 @@
       "name": "OS Credential Dumping: DCSync",
       "tactic": "Credential Access",
       "conditions": {
-        "event_types": ["directoryreplicationrequest", "network_connection", "networkconnect"],
+        "event_types": ["directory_replication", "directoryreplication", "directoryreplicationrequest"],
         "object_contains": ["drsgetncchanges"]
       },
       "confidence": 0.9
+    },
+    {
+      "technique_id": "T1003.006",
+      "name": "OS Credential Dumping: DCSync",
+      "tactic": "Credential Access",
+      "conditions": {
+        "event_types": ["network_connection", "networkconnect"],
+        "object_contains": ["m.exe"]
+      },
+      "confidence": 0.85
     },
     {
       "technique_id": "T1078",
       "name": "Valid Accounts",
       "tactic": "Defense Evasion",
       "conditions": {
-        "event_types": ["logonsuccess", "user_logon", "authentication"]
+        "event_types": ["logon_success", "logonsuccess", "user_logon", "authentication"]
       },
       "confidence": 0.65
     },
@@ -114,7 +124,7 @@
       "name": "Data Staged: Local Data Staging",
       "tactic": "Collection",
       "conditions": {
-        "event_types": ["file_create", "filecreate"],
+        "event_types": ["file_write", "filewrite", "file_create", "filecreate"],
         "object_contains": ["creds_dump.txt", "dump.txt", "passwords.txt", "staged_data"]
       },
       "confidence": 0.75
@@ -150,12 +160,22 @@
       "confidence": 0.75
     },
     {
+      "technique_id": "T1071.001",
+      "name": "Application Layer Protocol: Web Protocols",
+      "tactic": "Command and Control",
+      "conditions": {
+        "event_types": ["network_connection", "networkconnect", "connectionallowed"],
+        "object_contains": [":443", ":80"]
+      },
+      "confidence": 0.75
+    },
+    {
       "technique_id": "T1070",
       "name": "Indicator Removal",
       "tactic": "Defense Evasion",
       "conditions": {
-        "event_types": ["processterminate", "process_terminate"],
-        "actor_contains": ["m.exe", "mimikatz"]
+        "event_types": ["process_terminate", "processterminate"],
+        "object_contains": ["m.exe", "mimikatz"]
       },
       "confidence": 0.6
     },

@@ -57,13 +57,13 @@ def load_rules(rules_path: Optional[str] = None, ioc_path: Optional[str] = None)
 
 def evaluate_mitre(event: Dict[str, Any], techniques: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     matches: List[Dict[str, Any]] = []
+    seen_ids = set()
 
     event_type = str(event.get("event_type", "")).strip().lower()
     actor = str(event.get("actor", "")).strip().lower()
     obj = str(event.get("object", "")).strip().lower()
     cmd = str(event.get("command", "")).strip().lower()
     dst_ip = str(event.get("dst_ip", "")).strip()
-    raw_str = str(event.get("raw", "")).lower()
 
     for tech in techniques:
         cond = tech.get("conditions", tech.get("match", {}))
@@ -80,18 +80,19 @@ def evaluate_mitre(event: Dict[str, Any], techniques: List[Dict[str, Any]]) -> L
             is_matched = False
 
         obj_contains = cond.get("object_contains") or ([cond["object"]] if "object" in cond else None)
-        if obj_contains and not any(sub.lower() in obj or sub.lower() in raw_str for sub in obj_contains):
+        if obj_contains and not any(sub.lower() in obj for sub in obj_contains):
             is_matched = False
 
         cmd_contains = cond.get("command_contains") or ([cond["command"]] if "command" in cond else None)
-        if cmd_contains and not any(sub.lower() in cmd or sub.lower() in raw_str for sub in cmd_contains):
+        if cmd_contains and not any(sub.lower() in cmd for sub in cmd_contains):
             is_matched = False
 
         if cond.get("external_dst_ip"):
             if not (is_external_ip(dst_ip) or is_external_ip(obj)):
                 is_matched = False
 
-        if is_matched:
+        if is_matched and tech["technique_id"] not in seen_ids:
+            seen_ids.add(tech["technique_id"])
             matches.append({
                 "technique_id": tech["technique_id"],
                 "name": tech["name"],
