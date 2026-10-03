@@ -26,7 +26,7 @@ SYSTEM = (
 )
 
 
-# JSON shape we want back
+# JSON shape we want back (also used to constrain Ollama output via the format field)
 SCHEMA = {
     "type": "object",
     "properties": {
@@ -167,24 +167,23 @@ def reconstruct(path, provider_name="ollama"):
 
     provider = get_provider(provider_name)
 
-    # Do not pass json_schema here.
-    # This avoids the long Ollama structured-output request that timed out.
     raw = provider.complete(
         SYSTEM,
         prompt,
+        json_schema=SCHEMA,
     )
 
-    # Local models sometimes wrap JSON in text - be forgiving.
+    # Local models sometimes wrap JSON in text — be forgiving.
     try:
         result = json.loads(raw)
     except json.JSONDecodeError:
         start = raw.find("{")
+        end = raw.rfind("}")
 
-        if start == -1:
+        if start == -1 or end == -1:
             raise ValueError("Ollama did not return valid JSON.")
 
-        decoder = json.JSONDecoder()
-        result, _ = decoder.raw_decode(raw[start:])
+        result = json.loads(raw[start:end + 1])
 
     os.makedirs("output", exist_ok=True)
 
