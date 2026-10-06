@@ -91,8 +91,15 @@ def relevance(claim_words, cited_event_words):
 
     return len(overlap) / len(claim_words)
 
+try:
+    from src.ai.parameter_verifier import check_parameter_consistency
+except ImportError:
+    from parameter_verifier import check_parameter_consistency
+
+
 def verify(reconstruction, events, relevance_threshold=0.30):
     index, real_ids = build_event_index(events)
+    events_by_id = {e["artifact_id"]: e for e in events if isinstance(e, dict) and "artifact_id" in e}
 
     stages = reconstruction.get("stages", [])
 
@@ -103,16 +110,14 @@ def verify(reconstruction, events, relevance_threshold=0.30):
         cited = s.get("artifact_ids", [])
         claim_words = tokenize(s.get("claim", ""))
 
-        # Check whether every cited artifact actually exists.
+        # 1. Existence check
         missing = [
             aid
             for aid in cited
             if aid not in real_ids
         ]
 
-        # Relevance:
-        # Calculate relevance for each existing cited event
-        # and use the best score.
+        # 2. Relevance check
         rel_scores = [
             relevance(claim_words, index[aid])
             for aid in cited
@@ -127,22 +132,42 @@ def verify(reconstruction, events, relevance_threshold=0.30):
 
         best_rel = relevance(claim_words, combined_event_words)
 
-        # Classification
+        # 3. Parameter / Factual Consistency Check
         if missing or not cited:
             status = "unsupported"
-
-        elif best_rel >= relevance_threshold:
-            status = "grounded"
-            grounded += 1
-
-        else:
+            param_res = {
+                "passed": False,
+                "unsupported_parameters": [f"Missing artifact ID(s): {missing}" if missing else "No artifact IDs cited"]
+            }
+        elif best_rel < relevance_threshold:
             status = "weak"
+            param_res = {
+                "passed": False,
+                "unsupported_parameters": ["Claim not semantically relevant to evidence"]
+            }
+        else:
+            cited_events = [events_by_id[aid] for aid in cited if aid in events_by_id]
+            param_res = check_parameter_consistency(s.get("claim", ""), cited_events)
+            if not param_res["passed"]:
+                status = "unsupported"
+            else:
+                status = "grounded"
+                grounded += 1
 
         checked.append({
             **s,
             "status": status,
+            "classification": status,
+            "grounded": (status == "grounded"),
+            "artifact_exists": len(missing) == 0 and bool(cited),
             "missing_ids": missing,
             "relevance": round(best_rel, 2),
+            "relevance_score": round(best_rel, 2),
+            "parameter_check": {
+                "passed": param_res["passed"],
+                "unsupported_parameters": param_res.get("unsupported_parameters", []),
+                "supported_parameters": param_res.get("supported_parameters", [])
+            },
         })
 
     total = len(stages)

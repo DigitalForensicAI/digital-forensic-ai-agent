@@ -43,6 +43,13 @@ def _keywords(text):
     return {w for w in words if w not in STOPWORDS and len(w) > 2}
 
 
+import os
+try:
+    from src.ai.parameter_verifier import check_parameter_consistency
+except ImportError:
+    from ai.parameter_verifier import check_parameter_consistency
+
+
 def load_event_index(events):
     return {e["artifact_id"]: e for e in events}
 
@@ -54,33 +61,55 @@ def verify_claim(claim, event_index):
         "cited_artifact_ids": [str],  # evidence the model says supports it
         "technique_id": str | None,   # technique the claim asserts, if any
     }
-    Returns a verdict dict.
+    Returns a verdict dict adhering to:
+    Claim -> Artifact existence -> Lexical relevance -> Parameter consistency -> Final classification
     """
-    missing = [aid for aid in claim["cited_artifact_ids"] if aid not in event_index]
-    if missing:
+    claim_text = claim.get("text") or claim.get("claim", "")
+    cited_ids = claim.get("cited_artifact_ids") or claim.get("artifact_ids", [])
+    technique_id = claim.get("technique_id")
+
+    # 1. EXISTENCE CHECK
+    missing = [aid for aid in cited_ids if aid not in event_index]
+    if missing or not cited_ids:
         return {
-            "claim": claim["text"],
+            "claim": claim_text,
+            "artifact_id": cited_ids[0] if cited_ids else None,
+            "artifact_ids": cited_ids,
+            "artifact_exists": False,
+            "relevance_score": 0.0,
+            "parameter_check": {
+                "passed": False,
+                "unsupported_parameters": [f"Missing artifact ID(s): {missing}" if missing else "No artifact IDs cited"]
+            },
             "verdict": "UNSUPPORTED",
+            "classification": "unsupported",
             "grounding": 0.0,
             "detail": f"Cited artifact id(s) not found in evidence store: {missing}. "
                       f"This citation is fabricated.",
         }
 
-    cited_events = [event_index[aid] for aid in claim["cited_artifact_ids"]]
-    claim_kw = _keywords(claim["text"])
+    cited_events = [event_index[aid] for aid in cited_ids]
+    claim_kw = _keywords(claim_text)
 
+    # 2. LEXICAL / SEMANTIC RELEVANCE CHECK
     relevant_any = False
     detail_parts = []
+    max_overlap_ratio = 0.0
     for e in cited_events:
         technique_match = (
-            claim.get("technique_id") is not None
-            and claim["technique_id"] == e.get("technique_id")
+            technique_id is not None
+            and technique_id == e.get("technique_id")
         )
         event_kw = _keywords(
-            f"{e.get('object','')} {e.get('command','')} {e.get('technique_name','')} {e.get('event_type','')}"
+            f"{e.get('object','')} {e.get('command','')} {e.get('technique_name','')} "
+            f"{e.get('event_type','')} {e.get('src_ip','')} {e.get('dst_ip','')} "
+            f"{e.get('reason','')} {e.get('raw','')}"
         )
         overlap = claim_kw & event_kw
         keyword_match = len(overlap) > 0
+        ratio = len(overlap) / len(claim_kw) if claim_kw else 0.0
+        if ratio > max_overlap_ratio:
+            max_overlap_ratio = ratio
 
         is_relevant = technique_match or keyword_match
         relevant_any = relevant_any or is_relevant
@@ -90,22 +119,63 @@ def verify_claim(claim, event_index):
             f"keyword_overlap={sorted(overlap) if overlap else 'none'}"
         )
 
-    if relevant_any:
+    if not relevant_any:
         return {
-            "claim": claim["text"],
-            "verdict": "GROUNDED",
-            "grounding": 1.0,
-            "detail": "; ".join(detail_parts),
-        }
-    else:
-        return {
-            "claim": claim["text"],
+            "claim": claim_text,
+            "artifact_id": cited_ids[0] if cited_ids else None,
+            "artifact_ids": cited_ids,
+            "artifact_exists": True,
+            "relevance_score": round(max_overlap_ratio, 2),
+            "parameter_check": {
+                "passed": False,
+                "unsupported_parameters": ["Claim not semantically relevant to evidence"]
+            },
             "verdict": "MISMATCHED",
+            "classification": "mismatched",
             "grounding": 0.0,
             "detail": "Cited artifact id(s) exist, but neither technique nor keyword content "
                       "matches this specific claim; the evidence does not actually support it. "
                       "(" + "; ".join(detail_parts) + ")",
         }
+
+    # 3. PARAMETER & FACTUAL CONSISTENCY CHECK
+    param_res = check_parameter_consistency(claim_text, cited_events)
+    if not param_res["passed"]:
+        unsupported_str = ", ".join(param_res["unsupported_parameters"])
+        return {
+            "claim": claim_text,
+            "artifact_id": cited_ids[0] if cited_ids else None,
+            "artifact_ids": cited_ids,
+            "artifact_exists": True,
+            "relevance_score": round(max_overlap_ratio, 2),
+            "parameter_check": {
+                "passed": False,
+                "unsupported_parameters": param_res["unsupported_parameters"]
+            },
+            "verdict": "MISMATCHED",
+            "classification": "unsupported",
+            "grounding": 0.0,
+            "detail": f"Evidence is topically relevant, but contains unsupported factual parameters/scope: {unsupported_str}. "
+                      f"({'; '.join(detail_parts)})",
+        }
+
+    # 4. FINAL CLASSIFICATION: FULLY GROUNDED
+    return {
+        "claim": claim_text,
+        "artifact_id": cited_ids[0] if cited_ids else None,
+        "artifact_ids": cited_ids,
+        "artifact_exists": True,
+        "relevance_score": round(max_overlap_ratio, 2),
+        "parameter_check": {
+            "passed": True,
+            "unsupported_parameters": [],
+            "supported_parameters": param_res.get("supported_parameters", [])
+        },
+        "verdict": "GROUNDED",
+        "classification": "grounded",
+        "grounding": 1.0,
+        "detail": "; ".join(detail_parts),
+    }
 
 
 def verify_claims(claims, events):
@@ -116,12 +186,21 @@ def verify_claims(claims, events):
 
 
 if __name__ == "__main__":
-    with open("/home/claude/data/samples/correlations_sample.json") as f:
+    candidates = [
+        "data/samples/correlations_sample.json",
+        "data/samples/correlations.json",
+        "/home/claude/data/samples/correlations_sample.json",
+    ]
+    corr_file = next((c for c in candidates if os.path.exists(c)), candidates[0])
+    with open(corr_file, "r", encoding="utf-8") as f:
         events = json.load(f)
 
-    # A small set of demo claims: two true, one from the Review 1 fabricated-ID
-    # example, and one new "mismatched evidence" case that only the upgraded
-    # (semantic) verifier catches.
+    # Demo claims covering:
+    # 1. True baseline
+    # 2. True baseline
+    # 3. Review 1 fabricated artifact ID
+    # 4. Review 2 mismatched evidence
+    # 5. Review 3 / Final Review B3 scope inflation (overclaim)
     demo_claims = [
         {
             "text": "The adversary ran an obfuscated PowerShell command to begin execution.",
@@ -143,10 +222,21 @@ if __name__ == "__main__":
             "cited_artifact_ids": ["evt_00002"],  # exists, but is really T1105 tool-drop, not ransomware
             "technique_id": "T1486",
         },
+        {
+            "text": "The adversary exfiltrated over 500 files to a foreign server.",
+            "cited_artifact_ids": ["evt_00010"],  # exists and matches technique, but 500 files is unsupported
+            "technique_id": "T1041",
+        },
     ]
 
     result = verify_claims(demo_claims, events)
-    with open("/home/claude/data/samples/verification_sample.json", "w") as f:
+    out_candidates = [
+        "data/samples/verification_sample.json",
+        "/home/claude/data/samples/verification_sample.json",
+    ]
+    out_file = out_candidates[0]
+    os.makedirs(os.path.dirname(out_file), exist_ok=True)
+    with open(out_file, "w", encoding="utf-8") as f:
         json.dump(result, f, indent=2)
 
     print(f"Overall grounding score: {result['overall_grounding_score']}\n")

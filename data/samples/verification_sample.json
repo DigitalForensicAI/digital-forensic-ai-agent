@@ -1,29 +1,98 @@
 {
-  "overall_grounding_score": 0.5,
+  "overall_grounding_score": 0.4,
   "claims": [
     {
       "claim": "The adversary ran an obfuscated PowerShell command to begin execution.",
+      "artifact_id": "evt_00001",
+      "artifact_ids": [
+        "evt_00001"
+      ],
+      "artifact_exists": true,
+      "relevance_score": 0.29,
+      "parameter_check": {
+        "passed": true,
+        "unsupported_parameters": [],
+        "supported_parameters": []
+      },
       "verdict": "GROUNDED",
+      "classification": "grounded",
       "grounding": 1.0,
       "detail": "evt_00001: technique_match=True, keyword_overlap=['command', 'powershell']"
     },
     {
       "claim": "The adversary dumped credentials directly from LSASS memory.",
+      "artifact_id": "evt_00004",
+      "artifact_ids": [
+        "evt_00004"
+      ],
+      "artifact_exists": true,
+      "relevance_score": 0.17,
+      "parameter_check": {
+        "passed": true,
+        "unsupported_parameters": [],
+        "supported_parameters": []
+      },
       "verdict": "GROUNDED",
+      "classification": "grounded",
       "grounding": 1.0,
       "detail": "evt_00004: technique_match=True, keyword_overlap=['lsass']"
     },
     {
       "claim": "Files were encrypted by ransomware.",
+      "artifact_id": "evt_00099",
+      "artifact_ids": [
+        "evt_00099"
+      ],
+      "artifact_exists": false,
+      "relevance_score": 0.0,
+      "parameter_check": {
+        "passed": false,
+        "unsupported_parameters": [
+          "Missing artifact ID(s): ['evt_00099']"
+        ]
+      },
       "verdict": "UNSUPPORTED",
+      "classification": "unsupported",
       "grounding": 0.0,
       "detail": "Cited artifact id(s) not found in evidence store: ['evt_00099']. This citation is fabricated."
     },
     {
       "claim": "Files were encrypted by ransomware.",
+      "artifact_id": "evt_00002",
+      "artifact_ids": [
+        "evt_00002"
+      ],
+      "artifact_exists": true,
+      "relevance_score": 0.0,
+      "parameter_check": {
+        "passed": false,
+        "unsupported_parameters": [
+          "Claim not semantically relevant to evidence"
+        ]
+      },
       "verdict": "MISMATCHED",
+      "classification": "mismatched",
       "grounding": 0.0,
       "detail": "Cited artifact id(s) exist, but neither technique nor keyword content matches this specific claim; the evidence does not actually support it. (evt_00002: technique_match=False, keyword_overlap=none)"
+    },
+    {
+      "claim": "The adversary exfiltrated over 500 files to a foreign server.",
+      "artifact_id": "evt_00010",
+      "artifact_ids": [
+        "evt_00010"
+      ],
+      "artifact_exists": true,
+      "relevance_score": 0.0,
+      "parameter_check": {
+        "passed": false,
+        "unsupported_parameters": [
+          "Claim not semantically relevant to evidence"
+        ]
+      },
+      "verdict": "MISMATCHED",
+      "classification": "mismatched",
+      "grounding": 0.0,
+      "detail": "Cited artifact id(s) exist, but neither technique nor keyword content matches this specific claim; the evidence does not actually support it. (evt_00010: technique_match=False, keyword_overlap=none)"
     }
   ]
 }

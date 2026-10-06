@@ -21,8 +21,12 @@ mismatched claims that an unguarded model would simply pass through --
 this is the evidence Dev's evaluation stage needs for the adversarial
 comparison table.
 """
+import os
 import json
-from verifier import verify_claims, load_event_index
+try:
+    from src.verifier import verify_claims, load_event_index
+except ImportError:
+    from verifier import verify_claims, load_event_index
 
 CRAFTED_CASES = [
     {
@@ -91,7 +95,13 @@ def run_grounded(cases, events):
 
 
 def main():
-    with open("/home/claude/data/samples/correlations_sample.json") as f:
+    candidates = [
+        "data/samples/correlations_sample.json",
+        "data/samples/correlations.json",
+        "/home/claude/data/samples/correlations_sample.json",
+    ]
+    corr_file = next((c for c in candidates if os.path.exists(c)), candidates[0])
+    with open(corr_file, "r", encoding="utf-8") as f:
         events = json.load(f)
 
     unguarded_results = run_unguarded(CRAFTED_CASES)
@@ -123,8 +133,17 @@ def main():
         "comparison": comparison,
     }
 
-    with open("/home/claude/data/samples/adversarial_results.json", "w") as f:
-        json.dump(summary, f, indent=2)
+    out_paths = [
+        "data/samples/adversarial_results.json",
+        "output/adversarial_results.json",
+    ]
+    for p in out_paths:
+        try:
+            os.makedirs(os.path.dirname(p), exist_ok=True)
+            with open(p, "w", encoding="utf-8") as f:
+                json.dump(summary, f, indent=2)
+        except Exception:
+            pass
 
     print(f"Fabricated cases: {should_catch} / {len(CRAFTED_CASES)}")
     print(f"Caught by GROUNDED pipeline: {caught} / {should_catch}")

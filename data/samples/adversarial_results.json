@@ -1,9 +1,9 @@
 {
   "total_cases": 5,
   "fabricated_cases": 3,
-  "fabricated_cases_caught_by_grounded_pipeline": 2,
+  "fabricated_cases_caught_by_grounded_pipeline": 3,
   "fabricated_cases_caught_by_unguarded_model": 0,
-  "overall_grounding_score_on_case_set": 0.6,
+  "overall_grounding_score_on_case_set": 0.4,
   "comparison": [
     {
       "case_id": "A1_true_claim",
@@ -46,9 +46,9 @@
       "description": "Overclaim: the technique is correctly identified (T1041, matches), so technique-alignment alone would pass this. Flagged here as a known limitation -- see notes below.",
       "is_fabricated": true,
       "unguarded_result": "ACCEPTED",
-      "grounded_verdict": "GROUNDED",
-      "grounded_score": 1.0,
-      "grounding_layer_caught_it": false
+      "grounded_verdict": "MISMATCHED",
+      "grounded_score": 0.0,
+      "grounding_layer_caught_it": true
     }
   ]
 }
